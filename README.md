@@ -8,8 +8,6 @@ RESTApi, TDD를 준수하며 다육이 프로젝트.
 
 - Spring Boot
 - Spring Security
-- Mustache
-- RestDocs
 
 ## Release History
 
