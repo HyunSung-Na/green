@@ -1,47 +1,65 @@
 package com.green.demo.model.user;
 
 import com.green.demo.security.Jwt;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.LocalDateTime.now;
-import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+@Entity
+@Getter
+@NoArgsConstructor
 public class User {
 
-  private final Long seq;
+  @Id
+  @GeneratedValue
+  private Long seq;
 
-  private final String name;
+  @Column
+  private String name;
 
-  private final Email email;
+  @Column
+  @Enumerated
+  private Email email;
 
+  @Column
   private String password;
 
+  @Column
   private String profileImageUrl;
 
+  @Column
   private int loginCount;
 
+  @Column
   private LocalDateTime lastLoginAt;
 
-  private final LocalDateTime createAt;
+  @Column
+  private LocalDateTime createAt;
 
+  @Builder
   public User(String name, Email email, String password) {
     this(name, email, password, null);
   }
 
+  @Builder
   public User(String name, Email email, String password, String profileImageUrl) {
     this(null, name, email, password, profileImageUrl, 0, null, null);
   }
 
+  @Builder
   public User(Long seq, String name, Email email, String password, String profileImageUrl, int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
     checkArgument(isNotEmpty(name), "name must be provided.");
     checkArgument(
@@ -89,38 +107,6 @@ public class User {
     this.profileImageUrl = profileImageUrl;
   }
 
-  public Long getSeq() {
-    return seq;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public Email getEmail() {
-    return email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public Optional<String> getProfileImageUrl() {
-    return ofNullable(profileImageUrl);
-  }
-
-  public int getLoginCount() {
-    return loginCount;
-  }
-
-  public Optional<LocalDateTime> getLastLoginAt() {
-    return ofNullable(lastLoginAt);
-  }
-
-  public LocalDateTime getCreateAt() {
-    return createAt;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -146,73 +132,6 @@ public class User {
       .append("lastLoginAt", lastLoginAt)
       .append("createAt", createAt)
       .toString();
-  }
-
-  static public class Builder {
-    private Long seq;
-    private String name;
-    private Email email;
-    private String password;
-    private String profileImageUrl;
-    private int loginCount;
-    private LocalDateTime lastLoginAt;
-    private LocalDateTime createAt;
-
-    public Builder() {}
-
-    public Builder(User user) {
-      this.seq = user.seq;
-      this.name = user.name;
-      this.email = user.email;
-      this.password = user.password;
-      this.loginCount = user.loginCount;
-      this.lastLoginAt = user.lastLoginAt;
-      this.createAt = user.createAt;
-    }
-
-    public Builder seq(Long seq) {
-      this.seq = seq;
-      return this;
-    }
-
-    public Builder name(String name) {
-      this.name = name;
-      return this;
-    }
-
-    public Builder email(Email email) {
-      this.email = email;
-      return this;
-    }
-
-    public Builder password(String password) {
-      this.password = password;
-      return this;
-    }
-
-    public Builder profileImageUrl(String profileImageUrl) {
-      this.profileImageUrl = profileImageUrl;
-      return this;
-    }
-
-    public Builder loginCount(int loginCount) {
-      this.loginCount = loginCount;
-      return this;
-    }
-
-    public Builder lastLoginAt(LocalDateTime lastLoginAt) {
-      this.lastLoginAt = lastLoginAt;
-      return this;
-    }
-
-    public Builder createAt(LocalDateTime createAt) {
-      this.createAt = createAt;
-      return this;
-    }
-
-    public User build() {
-      return new User(seq, name, email, password, profileImageUrl, loginCount, lastLoginAt, createAt);
-    }
   }
 
 }

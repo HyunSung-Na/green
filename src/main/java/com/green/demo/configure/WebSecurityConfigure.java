@@ -83,28 +83,11 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  @Bean
-  public ConnectionBasedVoter connectionBasedVoter() {
-    final String regex = "^/api/user/(\\d+)/post/.*$";
-    Pattern pattern = Pattern.compile(regex);
-    RequestMatcher requiresAuthorizationRequestMatcher = new RegexRequestMatcher(pattern.pattern(), null);
-    return new ConnectionBasedVoter(
-      requiresAuthorizationRequestMatcher,
-      (String url) -> {
-        /* url에서 targetId를 추출하기 위해 정규식 처리 */
-        Matcher matcher = pattern.matcher(url);
-        long id = matcher.find() ? toLong(matcher.group(1), -1) : -1;
-        return Id.of(User.class, id);
-      }
-    );
-  }
 
   @Bean
   public AccessDecisionManager accessDecisionManager() {
     List<AccessDecisionVoter<?>> decisionVoters = new ArrayList<>();
     decisionVoters.add(new WebExpressionVoter());
-    decisionVoters.add(connectionBasedVoter());
-    // 모든 voter가 승인해야 해야한다.
     return new UnanimousBased(decisionVoters);
   }
 

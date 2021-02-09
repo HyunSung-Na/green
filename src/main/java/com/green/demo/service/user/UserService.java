@@ -1,9 +1,6 @@
 package com.green.demo.service.user;
 
-import com.google.common.eventbus.EventBus;
 import com.green.demo.error.NotFoundException;
-import com.green.demo.model.Id;
-import com.green.demo.model.user.ConnectedUser;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.repository.UserRepository;
@@ -57,7 +54,7 @@ public class UserService {
   }
 
   @Transactional
-  public User updateProfileImage(Id<User, Long> userId, String profileImageUrl) {
+  public User updateProfileImage(Long userId, String profileImageUrl) {
     User user = findById(userId)
       .orElseThrow(() -> new NotFoundException(User.class, userId));
     user.updateProfileImage(profileImageUrl);
@@ -66,7 +63,7 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public Optional<User> findById(Id<User, Long> userId) {
+  public Optional<User> findById(Long userId) {
     checkNotNull(userId, "userId must be provided.");
 
     return userRepository.findById(userId);
@@ -77,20 +74,6 @@ public class UserService {
     checkNotNull(email, "email must be provided.");
 
     return userRepository.findByEmail(email);
-  }
-
-  @Transactional(readOnly = true)
-  public List<ConnectedUser> findAllConnectedUser(Id<User, Long> userId) {
-    checkNotNull(userId, "userId must be provided.");
-
-    return userRepository.findAllConnectedUser(userId);
-  }
-
-  @Transactional(readOnly = true)
-  public List<Id<User, Long>> findConnectedIds(Id<User, Long> userId) {
-    checkNotNull(userId, "userId must be provided.");
-
-    return userRepository.findConnectedIds(userId);
   }
 
   private User insert(User user) {

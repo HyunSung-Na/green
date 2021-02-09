@@ -1,17 +1,25 @@
 package com.green.demo.model.user;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.regex.Pattern.matches;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+@Getter
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Email {
 
-  private final String address;
+  private String address;
 
   public Email(String address) {
     checkArgument(isNotEmpty(address), "address must be provided.");
@@ -28,22 +36,18 @@ public class Email {
     return matches("[\\w~\\-.+]+@[\\w~\\-]+(\\.[\\w~\\-]+)+", address);
   }
 
-  public String getName() {
+  public String emailName() {
     String[] tokens = address.split("@");
     if (tokens.length == 2)
       return tokens[0];
     return null;
   }
 
-  public String getDomain() {
+  public String emailDomain() {
     String[] tokens = address.split("@");
     if (tokens.length == 2)
       return tokens[1];
     return null;
-  }
-
-  public String getAddress() {
-    return address;
   }
 
   @Override

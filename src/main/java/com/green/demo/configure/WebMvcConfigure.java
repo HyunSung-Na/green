@@ -1,7 +1,5 @@
 package com.green.demo.configure;
 
-import com.github.prgrms.social.configure.support.SimpleOffsetPageRequest;
-import com.github.prgrms.social.configure.support.SimpleOffsetPageableHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -14,18 +12,6 @@ import java.util.List;
 
 @Configuration
 public class WebMvcConfigure implements WebMvcConfigurer {
-
-  @Bean
-  public SimpleOffsetPageableHandlerMethodArgumentResolver simpleOffsetPageableHandlerMethodArgumentResolver() {
-    SimpleOffsetPageableHandlerMethodArgumentResolver resolver = new SimpleOffsetPageableHandlerMethodArgumentResolver();
-    resolver.setFallbackPageable(new SimpleOffsetPageRequest(0, 5));
-    return resolver;
-  }
-
-  @Override
-  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-    argumentResolvers.add(simpleOffsetPageableHandlerMethodArgumentResolver());
-  }
 
   private final String baseApiPath = "api";
 
