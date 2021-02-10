@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -39,6 +40,12 @@ public class User {
 
   @Column
   private String profileImageUrl;
+
+  private String emailCheckToken;
+
+  private LocalDateTime emailCheckTokenGenDate;
+
+  private boolean emailVerified;
 
   @Column
   private int loginCount;
@@ -86,6 +93,18 @@ public class User {
   public void login(PasswordEncoder passwordEncoder, String credentials) {
     if (!passwordEncoder.matches(credentials, password))
       throw new IllegalArgumentException("Bad credential");
+  }
+
+  public void generateEmailCheckToken() {
+    this.emailCheckToken = UUID.randomUUID().toString();
+    this.emailCheckTokenGenDate = LocalDateTime.now();
+  }
+
+  public boolean isValidToken(String token) {
+    checkArgument(
+            token == null, "token must be provided");
+
+    return this.emailCheckToken.equals(token);
   }
 
   public void afterLoginSuccess() {

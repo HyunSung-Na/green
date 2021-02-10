@@ -1,14 +1,18 @@
 package com.green.demo.service.user;
 
+import com.green.demo.configure.AppProperties;
 import com.green.demo.error.NotFoundException;
+import com.green.demo.mail.EmailMessage;
+import com.green.demo.mail.EmailService;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -19,12 +23,18 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public class UserService {
 
   private final PasswordEncoder passwordEncoder;
-
+  private final TemplateEngine templateEngine;
   private final UserRepository userRepository;
+  private final AppProperties appProperties;
+  private final EmailService emailService;
 
-  public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+
+  public UserService(PasswordEncoder passwordEncoder, TemplateEngine templateEngine, UserRepository userRepository, AppProperties appProperties, EmailService emailService) {
     this.passwordEncoder = passwordEncoder;
+    this.templateEngine = templateEngine;
     this.userRepository = userRepository;
+    this.appProperties = appProperties;
+    this.emailService = emailService;
   }
 
   @Transactional
@@ -36,9 +46,28 @@ public class UserService {
     );
 
     User user = new User(name, email, passwordEncoder.encode(password));
+    user.generateEmailCheckToken();
     User saved = insert(user);
 
     return saved;
+  }
+
+  public void sendSignUpConfirmEmail(User newUser){
+    Context context = new Context();
+    context.setVariable("link", "/check-email-token?token="+ newUser.getEmailCheckToken() +
+            "&email=" +newUser.getEmail());
+    context.setVariable("name",newUser.getName());
+    context.setVariable("linkName", "회원가입 이메일 인증");
+    context.setVariable("message", "티켓원정대 회원 가입을 위해서 링크를 클릭하세요");
+    context.setVariable("host", appProperties.getHost());
+    String message = templateEngine.process("mail/simple-link", context);
+
+    EmailMessage emailMessage = EmailMessage.builder()
+            .to(String.valueOf(newUser.getEmail()))
+            .subject("티켓 원정대, 회원 가입 인증")
+            .message(message)
+            .build();
+    emailService.sendEmail(emailMessage);
   }
 
   @Transactional
