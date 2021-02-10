@@ -35,23 +35,4 @@ public class ServiceConfigure {
     return new Jwt(jwtTokenConfigure.getIssuer(), jwtTokenConfigure.getClientSecret(), jwtTokenConfigure.getExpirySeconds());
   }
 
-  @Bean
-  public Jackson2ObjectMapperBuilder configureObjectMapper() {
-    // Java time module
-    JavaTimeModule jtm = new JavaTimeModule();
-    jtm.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
-    Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder() {
-      @Override
-      public void configure(ObjectMapper objectMapper) {
-        super.configure(objectMapper);
-        objectMapper.setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
-        objectMapper.setVisibility(PropertyAccessor.IS_GETTER, JsonAutoDetect.Visibility.NONE);
-        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-      }
-    };
-    builder.serializationInclusion(JsonInclude.Include.NON_NULL);
-    builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    builder.modulesToInstall(jtm);
-    return builder;
-  }
 }
