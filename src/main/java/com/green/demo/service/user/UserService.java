@@ -7,19 +7,25 @@ import com.green.demo.mail.EmailService;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
   private final PasswordEncoder passwordEncoder;
@@ -27,15 +33,6 @@ public class UserService {
   private final UserRepository userRepository;
   private final AppProperties appProperties;
   private final EmailService emailService;
-
-
-  public UserService(PasswordEncoder passwordEncoder, TemplateEngine templateEngine, UserRepository userRepository, AppProperties appProperties, EmailService emailService) {
-    this.passwordEncoder = passwordEncoder;
-    this.templateEngine = templateEngine;
-    this.userRepository = userRepository;
-    this.appProperties = appProperties;
-    this.emailService = emailService;
-  }
 
   @Transactional
   public User join(String name, Email email, String password) {
@@ -48,7 +45,7 @@ public class UserService {
     User user = new User(name, email, passwordEncoder.encode(password));
     user.generateEmailCheckToken();
     User saved = insert(user);
-
+    sendSignUpConfirmEmail(saved);
     return saved;
   }
 
@@ -58,13 +55,13 @@ public class UserService {
             "&email=" +newUser.getEmail());
     context.setVariable("name",newUser.getName());
     context.setVariable("linkName", "회원가입 이메일 인증");
-    context.setVariable("message", "티켓원정대 회원 가입을 위해서 링크를 클릭하세요");
+    context.setVariable("message", "초록이 회원 가입을 위해서 링크를 클릭하세요");
     context.setVariable("host", appProperties.getHost());
     String message = templateEngine.process("mail/simple-link", context);
 
     EmailMessage emailMessage = EmailMessage.builder()
             .to(String.valueOf(newUser.getEmail()))
-            .subject("티켓 원정대, 회원 가입 인증")
+            .subject("초록이, 회원 가입 인증")
             .message(message)
             .build();
     emailService.sendEmail(emailMessage);
@@ -105,6 +102,12 @@ public class UserService {
     return userRepository.findByEmail(email);
   }
 
+  public void deleteById(Long userId) {
+    checkNotNull(userId, "userId must be provided.");
+
+    userRepository.deleteById(userId);
+  }
+
   private User insert(User user) {
     return userRepository.save(user);
   }
@@ -113,4 +116,20 @@ public class UserService {
     userRepository.save(user);
   }
 
+  public void completeSignUp(User user, String token) {
+    user.completeEmailAuth(token);
+  }
+
+  public Optional<User> checkFindByEmail(Email email) {
+    return userRepository.findByEmail(email);
+  }
+
+  public void updatePassword(User user, String newPassword) {
+    user.updatePassword(newPassword);
+  }
+
+  public List<User> users(PageRequest pageRequest) {
+    return userRepository.findAll(pageRequest)
+            .stream().collect(Collectors.toList());
+  }
 }

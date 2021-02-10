@@ -1,5 +1,6 @@
 package com.green.demo.model.user;
 
+import com.green.demo.error.UnauthorizedException;
 import com.green.demo.security.Jwt;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,6 +77,10 @@ public class User {
     checkNotNull(email, "email must be provided.");
     checkNotNull(password, "password must be provided.");
     checkArgument(
+            password.length() >= 8 && password.length() <= 16,
+            "password length must be between 8 and 16 characters."
+    );
+    checkArgument(
       profileImageUrl == null || profileImageUrl.length() <= 255,
       "profileImageUrl length must be less than 255 characters."
     );
@@ -101,8 +106,7 @@ public class User {
   }
 
   public boolean isValidToken(String token) {
-    checkArgument(
-            token == null, "token must be provided");
+    checkNotNull(token, "token must be provided.");
 
     return this.emailCheckToken.equals(token);
   }
@@ -153,4 +157,20 @@ public class User {
       .toString();
   }
 
+    public void completeEmailAuth(String token) {
+      if (token != this.emailCheckToken)
+        throw new UnauthorizedException("Bad token");
+
+      this.emailVerified = true;
+    }
+
+  public void updatePassword(String newPassword) {
+    checkNotNull(password, "password must be provided.");
+    checkArgument(
+            newPassword.length() >= 8 && newPassword.length() <= 16,
+            "password length must be between 8 and 16 characters."
+    );
+
+    this.password = newPassword;
+  }
 }
