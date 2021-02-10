@@ -77,10 +77,6 @@ public class User {
     checkNotNull(email, "email must be provided.");
     checkNotNull(password, "password must be provided.");
     checkArgument(
-            password.length() >= 8 && password.length() <= 16,
-            "password length must be between 8 and 16 characters."
-    );
-    checkArgument(
       profileImageUrl == null || profileImageUrl.length() <= 255,
       "profileImageUrl length must be less than 255 characters."
     );

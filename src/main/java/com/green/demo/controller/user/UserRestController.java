@@ -29,7 +29,7 @@ public class UserRestController {
     private final Jwt jwt;
 
     @PostMapping("join")
-    public ApiResult<JoinResult> join(@ModelAttribute SignUpRequest signUpRequest) {
+    public ApiResult<JoinResult> join(@RequestBody SignUpRequest signUpRequest) {
         User newUser = userService.join(signUpRequest.getName(),
                                         new Email(signUpRequest.getPrincipal()),
                                         signUpRequest.getCredentials());

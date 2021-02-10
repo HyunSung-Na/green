@@ -38,8 +38,8 @@ public class UserService {
   public User join(String name, Email email, String password) {
     checkArgument(isNotEmpty(password), "password must be provided.");
     checkArgument(
-      password.length() >= 4 && password.length() <= 15,
-      "password length must be between 4 and 15 characters."
+      password.length() >= 8 && password.length() <= 16,
+      "password length must be between 8 and 16 characters."
     );
 
     User user = new User(name, email, passwordEncoder.encode(password));
@@ -106,6 +106,7 @@ public class UserService {
     checkNotNull(userId, "userId must be provided.");
 
     userRepository.deleteById(userId);
+    userRepository.flush();
   }
 
   private User insert(User user) {
@@ -125,6 +126,12 @@ public class UserService {
   }
 
   public void updatePassword(User user, String newPassword) {
+    checkArgument(isNotEmpty(newPassword), "password must be provided.");
+    checkArgument(
+            newPassword.length() >= 8 && newPassword.length() <= 16,
+            "password length must be between 8 and 16 characters."
+    );
+
     user.updatePassword(newPassword);
   }
 

@@ -16,4 +16,11 @@ public class SignUpRequest {
     private String principal;
 
     private String credentials;
+
+    public SignUpRequest(String name, String principal, String credentials) {
+        this.name = name;
+        this.principal = principal;
+        this.credentials = credentials;
+    }
+
 }
