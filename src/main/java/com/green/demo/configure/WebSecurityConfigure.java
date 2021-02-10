@@ -1,9 +1,7 @@
 package com.green.demo.configure;
 
 
-import com.green.demo.model.Id;
 import com.green.demo.model.user.Role;
-import com.green.demo.model.user.User;
 import com.green.demo.security.*;
 import com.green.demo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +26,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
 @Configuration
 @EnableWebSecurity
