@@ -154,7 +154,7 @@ public class User {
   }
 
     public void completeEmailAuth(String token) {
-      if (token != this.emailCheckToken)
+      if (!this.emailCheckToken.equals(token))
         throw new UnauthorizedException("Bad token");
 
       this.emailVerified = true;

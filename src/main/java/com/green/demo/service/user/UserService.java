@@ -119,6 +119,7 @@ public class UserService {
 
   public void completeSignUp(User user, String token) {
     user.completeEmailAuth(token);
+    userRepository.save(user);
   }
 
   public Optional<User> checkFindByEmail(Email email) {

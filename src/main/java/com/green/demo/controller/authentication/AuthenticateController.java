@@ -17,15 +17,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.green.demo.util.ApiResult.OK;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class AuthenticateController {
 
     private final UserService userService;
@@ -47,7 +45,7 @@ public class AuthenticateController {
                         new AuthenticationResult(apiToken, user)));
     }
 
-    @PostMapping
+    @PostMapping("auth")
     public ApiResult<AuthenticationResultDto> authentication(@RequestBody AuthenticationRequest authRequest) throws UnauthorizedException {
         try {
             JwtAuthenticationToken authToken = new JwtAuthenticationToken(authRequest.getPrincipal(), authRequest.getCredentials());

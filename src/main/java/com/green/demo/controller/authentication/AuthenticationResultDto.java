@@ -14,7 +14,8 @@ public class AuthenticationResultDto {
   private UserDto userDto;
 
   public AuthenticationResultDto(AuthenticationResult details) {
-
+    this.jwtToken = details.getApiToken();
+    this.userDto = UserDto.of(details.getUser());
   }
 
   @Override
