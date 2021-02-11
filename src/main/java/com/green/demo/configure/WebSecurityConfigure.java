@@ -21,8 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +37,14 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
   private final EntryPointUnauthorizedHandler unauthorizedHandler;
 
-  public WebSecurityConfigure(Jwt jwt, JwtTokenConfigure jwtTokenConfigure, JwtAccessDeniedHandler accessDeniedHandler, EntryPointUnauthorizedHandler unauthorizedHandler) {
+  private final CorsConfig corsConfig;
+
+  public WebSecurityConfigure(Jwt jwt, JwtTokenConfigure jwtTokenConfigure, JwtAccessDeniedHandler accessDeniedHandler, EntryPointUnauthorizedHandler unauthorizedHandler, CorsConfig corsConfig) {
     this.jwt = jwt;
     this.jwtTokenConfigure = jwtTokenConfigure;
     this.accessDeniedHandler = accessDeniedHandler;
     this.unauthorizedHandler = unauthorizedHandler;
+    this.corsConfig = corsConfig;
   }
 
   @Bean
@@ -108,7 +109,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         .accessDecisionManager(accessDecisionManager())
         .anyRequest().permitAll()
         .and()
-      .formLogin()
+            .addFilter(corsConfig.corsFilter())
+            .formLogin()
         .disable();
     http
       .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
