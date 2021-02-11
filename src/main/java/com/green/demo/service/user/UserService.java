@@ -7,6 +7,7 @@ import com.green.demo.mail.EmailService;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.repository.UserRepository;
+import com.green.demo.security.JwtAuthentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -102,6 +103,12 @@ public class UserService {
     return userRepository.findByEmail(email);
   }
 
+  @Transactional(readOnly = true)
+  public List<User> users(PageRequest pageRequest) {
+    return userRepository.findAll(pageRequest)
+            .stream().collect(Collectors.toList());
+  }
+
   public void deleteById(Long userId) {
     checkNotNull(userId, "userId must be provided.");
 
@@ -126,18 +133,16 @@ public class UserService {
     return userRepository.findByEmail(email);
   }
 
-  public void updatePassword(User user, String newPassword) {
+  public void updatePassword(JwtAuthentication user, String newPassword) {
     checkArgument(isNotEmpty(newPassword), "password must be provided.");
     checkArgument(
             newPassword.length() >= 8 && newPassword.length() <= 16,
             "password length must be between 8 and 16 characters."
     );
-
-    user.updatePassword(newPassword);
+    User passwordChangeUser = userRepository.findByEmail(user.email)
+            .orElseThrow( () -> new NotFoundException(User.class, user));
+    passwordChangeUser.updatePassword(newPassword);
+    userRepository.save(passwordChangeUser);
   }
 
-  public List<User> users(PageRequest pageRequest) {
-    return userRepository.findAll(pageRequest)
-            .stream().collect(Collectors.toList());
-  }
 }

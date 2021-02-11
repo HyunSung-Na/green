@@ -70,8 +70,8 @@ public class UserRestController {
     }
 
     @PostMapping("user/settings/password")
-    public ResponseEntity<?> updatePassword(@AuthenticationPrincipal User user, String newPassword) {
-        userService.updatePassword(user, newPassword);
+    public ResponseEntity<?> updatePassword(@AuthenticationPrincipal JwtAuthentication jwtAuthentication, String newPassword) {
+        userService.updatePassword(jwtAuthentication, newPassword);
         return ResponseEntity.ok().build();
     }
 

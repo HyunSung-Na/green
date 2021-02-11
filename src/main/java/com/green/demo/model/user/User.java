@@ -1,6 +1,7 @@
 package com.green.demo.model.user;
 
 import com.green.demo.error.UnauthorizedException;
+import com.green.demo.model.item.Item;
 import com.green.demo.security.Jwt;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -57,6 +60,9 @@ public class User {
   @Column
   private LocalDateTime createAt;
 
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private final List<Item> items = new ArrayList<>();
+
   @Builder
   public User(String name, Email email, String password) {
     this(name, email, password, null);
@@ -101,7 +107,7 @@ public class User {
     this.emailCheckTokenGenDate = LocalDateTime.now();
   }
 
-  public boolean isValidToken(String token) {
+  private boolean isValidToken(String token) {
     checkNotNull(token, "token must be provided.");
 
     return this.emailCheckToken.equals(token);
@@ -124,6 +130,23 @@ public class User {
     );
 
     this.profileImageUrl = profileImageUrl;
+  }
+
+  public void completeEmailAuth(String token) {
+    if (!isValidToken(token))
+      throw new UnauthorizedException("Bad token");
+
+    this.emailVerified = true;
+  }
+
+  public void updatePassword(String newPassword) {
+    checkNotNull(password, "password must be provided.");
+    checkArgument(
+            newPassword.length() >= 8 && newPassword.length() <= 16,
+            "password length must be between 8 and 16 characters."
+    );
+
+    this.password = newPassword;
   }
 
   @Override
@@ -151,22 +174,5 @@ public class User {
       .append("lastLoginAt", lastLoginAt)
       .append("createAt", createAt)
       .toString();
-  }
-
-    public void completeEmailAuth(String token) {
-      if (!this.emailCheckToken.equals(token))
-        throw new UnauthorizedException("Bad token");
-
-      this.emailVerified = true;
-    }
-
-  public void updatePassword(String newPassword) {
-    checkNotNull(password, "password must be provided.");
-    checkArgument(
-            newPassword.length() >= 8 && newPassword.length() <= 16,
-            "password length must be between 8 and 16 characters."
-    );
-
-    this.password = newPassword;
   }
 }

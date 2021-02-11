@@ -131,6 +131,46 @@ public class UserRestControllerTest {
 
     @Test
     @Order(5)
+    void 회원목록조회실패() throws Exception{
+
+        Pageable page = PageRequest.of(0, 10);
+
+        mockMvc.perform(get(API_USER_URL + "info/list")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("page", String.valueOf(page.getPageNumber()))
+                .param("size", String.valueOf(page.getPageSize()))
+                .header("api_key", "wrongApiKey"))
+                .andDo(print())
+                .andExpect(status().is(401))
+                .andReturn();
+    }
+
+    @Test
+    @Order(6)
+    void 회원비밀번호수정실패_패스워드길이() throws Exception{
+        mockMvc.perform(post(API_USER_URL + "settings/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("newPassword", "wrong")
+                .header("api_key", apiToken))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andReturn();
+    }
+
+    @Test
+    @Order(7)
+    void 회원비밀번호수정() throws Exception{
+        mockMvc.perform(post(API_USER_URL + "settings/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("newPassword", "newPassword")
+                .header("api_key", apiToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @Order(8)
     void 회원삭제실패() throws Exception{
 
         mockMvc.perform(delete(API_USER_URL + "remove/" + ERROR_ID)
@@ -142,7 +182,7 @@ public class UserRestControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(9)
     void 회원삭제() throws Exception{
 
         mockMvc.perform(delete(API_USER_URL + "remove/" + TEST_ID)
