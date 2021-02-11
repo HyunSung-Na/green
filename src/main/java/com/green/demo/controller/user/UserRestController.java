@@ -2,10 +2,12 @@ package com.green.demo.controller.user;
 
 
 import com.green.demo.error.NotFoundException;
+import com.green.demo.error.UnauthorizedException;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.Role;
 import com.green.demo.model.user.User;
 import com.green.demo.security.Jwt;
+import com.green.demo.security.JwtAuthentication;
 import com.green.demo.service.user.UserService;
 import com.green.demo.util.ApiResult;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,11 @@ public class UserRestController {
     }
 
     @GetMapping("user/info/{userId}")
-    public ApiResult<UserDto> info(@PathVariable Long userId) {
+    public ApiResult<UserDto> info(@PathVariable Long userId, @AuthenticationPrincipal JwtAuthentication jwtAuthentication) {
+        if (!jwtAuthentication.id.equals(userId)) {
+            throw new UnauthorizedException("AuthenticationFailed id");
+        }
+
         return ApiResult.OK(
             userService.findById(userId)
                 .map(UserDto::of)
@@ -70,7 +76,12 @@ public class UserRestController {
     }
 
     @DeleteMapping("user/remove/{userId}")
-    public ResponseEntity<?> deleteAccount(@PathVariable Long userId) {
+    public ResponseEntity<?> deleteAccount(@PathVariable Long userId, @AuthenticationPrincipal JwtAuthentication jwtAuthentication) {
+
+        if (!jwtAuthentication.id.equals(userId)) {
+            throw new UnauthorizedException("AuthenticationFailed id");
+        }
+
         userService.deleteById(userId);
         return ResponseEntity.ok().build();
     }

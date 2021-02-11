@@ -91,6 +91,18 @@ public class UserRestControllerTest {
 
     @Test
     @Order(2)
+    void 회원조회실패() throws Exception{
+
+        mockMvc.perform(get(API_USER_URL + "info/" + ERROR_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("api_key", apiToken))
+                .andDo(print())
+                .andExpect(status().is(401))
+                .andReturn();
+    }
+
+    @Test
+    @Order(3)
     void 회원조회() throws Exception{
 
         mockMvc.perform(get(API_USER_URL + "info/" + TEST_ID)
@@ -102,7 +114,7 @@ public class UserRestControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void 회원목록조회() throws Exception{
 
         Pageable page = PageRequest.of(0, 10);
@@ -118,7 +130,19 @@ public class UserRestControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
+    void 회원삭제실패() throws Exception{
+
+        mockMvc.perform(delete(API_USER_URL + "remove/" + ERROR_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("api_key", apiToken))
+                .andDo(print())
+                .andExpect(status().is(401))
+                .andReturn();
+    }
+
+    @Test
+    @Order(6)
     void 회원삭제() throws Exception{
 
         mockMvc.perform(delete(API_USER_URL + "remove/" + TEST_ID)
