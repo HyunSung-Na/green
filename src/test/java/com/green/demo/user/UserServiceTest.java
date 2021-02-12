@@ -1,6 +1,7 @@
 package com.green.demo.user;
 
 import com.green.demo.error.NotFoundException;
+import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.service.user.UserService;
@@ -26,7 +27,7 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    private String name;
+    private Name name;
 
     private Email email;
 
@@ -34,7 +35,7 @@ public class UserServiceTest {
 
     @BeforeAll
     void setUp() {
-        name = "tester";
+        name = new Name("tester");
         email = new Email("test@gmail.com");
         password = "임의패스워드실험";
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.demo.controller.user.SignUpRequest;
 import com.green.demo.error.NotFoundException;
 import com.green.demo.mail.EmailService;
+import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.Role;
 import com.green.demo.model.user.User;
@@ -49,7 +50,7 @@ public class UserRestControllerTest {
 
     public static final String API_USER_URL = "/api/user/";
 
-    private String name;
+    private Name name;
 
     private String password;
 
@@ -57,7 +58,7 @@ public class UserRestControllerTest {
 
     @BeforeAll
     void setUp() {
-        name = "tester";
+        name = new Name("tester");
         String email = "test@gmail.com";
         password = "임의패스워드실험";
 

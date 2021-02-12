@@ -1,5 +1,6 @@
 package com.green.demo.controller.user;
 
+import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import lombok.Builder;
@@ -13,7 +14,7 @@ public class UserDto {
 
     private Long id;
 
-    private String name;
+    private Name name;
 
     private Email email;
 
@@ -32,7 +33,7 @@ public class UserDto {
     private LocalDateTime createAt;
 
     @Builder
-    private UserDto(Long id, String name, Email email, String profileImageUrl, String emailCheckToken,
+    private UserDto(Long id, Name name, Email email, String profileImageUrl, String emailCheckToken,
                    LocalDateTime emailCheckTokenGenDate, boolean emailVerified,
                    int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
         this.id = id;

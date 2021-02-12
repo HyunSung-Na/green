@@ -1,6 +1,7 @@
 package com.green.demo.model.user;
 
 import com.green.demo.error.UnauthorizedException;
+import com.green.demo.model.Name;
 import com.green.demo.model.item.Item;
 import com.green.demo.security.Jwt;
 import lombok.Builder;
@@ -33,7 +34,8 @@ public class User {
   private Long seq;
 
   @Column
-  private String name;
+  @Enumerated
+  private Name name;
 
   @Column
   @Enumerated
@@ -64,22 +66,17 @@ public class User {
   private final List<Item> items = new ArrayList<>();
 
   @Builder
-  public User(String name, Email email, String password) {
+  public User(Name name, Email email, String password) {
     this(name, email, password, null);
   }
 
   @Builder
-  public User(String name, Email email, String password, String profileImageUrl) {
+  public User(Name name, Email email, String password, String profileImageUrl) {
     this(null, name, email, password, profileImageUrl, 0, null, null);
   }
 
   @Builder
-  public User(Long seq, String name, Email email, String password, String profileImageUrl, int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
-    checkArgument(isNotEmpty(name), "name must be provided.");
-    checkArgument(
-      name.length() >= 1 && name.length() <= 10,
-      "name length must be between 1 and 10 characters."
-    );
+  public User(Long seq, Name name, Email email, String password, String profileImageUrl, int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
     checkNotNull(email, "email must be provided.");
     checkNotNull(password, "password must be provided.");
     checkArgument(
@@ -119,7 +116,7 @@ public class User {
   }
 
   public String newApiToken(Jwt jwt, String[] roles) {
-    Jwt.Claims claims = Jwt.Claims.of(seq, name, email, roles);
+    Jwt.Claims claims = Jwt.Claims.of(seq, email, roles);
     return jwt.newToken(claims);
   }
 

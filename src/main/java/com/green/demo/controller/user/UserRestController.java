@@ -3,6 +3,7 @@ package com.green.demo.controller.user;
 
 import com.green.demo.error.NotFoundException;
 import com.green.demo.error.UnauthorizedException;
+import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.Role;
 import com.green.demo.model.user.User;

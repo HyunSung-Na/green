@@ -4,6 +4,7 @@ import com.green.demo.configure.AppProperties;
 import com.green.demo.error.NotFoundException;
 import com.green.demo.mail.EmailMessage;
 import com.green.demo.mail.EmailService;
+import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserService {
   private final EmailService emailService;
 
   @Transactional
-  public User join(String name, Email email, String password) {
+  public User join(Name name, Email email, String password) {
     checkArgument(isNotEmpty(password), "password must be provided.");
     checkArgument(
       password.length() >= 8 && password.length() <= 16,
