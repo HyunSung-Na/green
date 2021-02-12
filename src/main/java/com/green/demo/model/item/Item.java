@@ -1,5 +1,7 @@
 package com.green.demo.model.item;
 
+import com.green.demo.controller.item.ItemUpdateDto;
+import com.green.demo.model.Name;
 import com.green.demo.model.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +29,7 @@ public class Item {
     private String itemName;
 
     @Column
-    private String owner;
+    private Name owner;
 
     @Column
     private String description;
@@ -51,19 +53,19 @@ public class Item {
     private User user;
 
     @Builder
-    public Item(String itemName, String owner, String description, int sellingPrice,
+    public Item(String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String status) {
         this(itemName, owner, description, sellingPrice, unitSales, status, null);
     }
 
     @Builder
-    public Item(String itemName, String owner, String description, int sellingPrice,
+    public Item(String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String status, String itemImageUrl) {
         this(null, itemName, owner, description, sellingPrice, unitSales, itemImageUrl, status, null);
     }
 
     @Builder
-    public Item(Long seq, String itemName, String owner, String description, int sellingPrice,
+    public Item(Long seq, String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String itemImageUrl, String status, LocalDateTime createAt) {
         this.seq = seq;
         this.itemName = itemName;
@@ -74,6 +76,14 @@ public class Item {
         this.itemImageUrl = itemImageUrl;
         this.status = status;
         this.createAt = defaultIfNull(createAt, now());;
+    }
+
+    public void update(ItemUpdateDto updateDto) {
+        this.itemName = updateDto.getItemName();
+        this.description = updateDto.getDescription();
+        this.sellingPrice = updateDto.getSellingPrice();
+        this.unitSales = updateDto.getUnitSales();
+        this.status = updateDto.getStatus();
     }
 
     @Override
@@ -105,4 +115,6 @@ public class Item {
                 .append("createAt", createAt)
                 .toString();
     }
+
+
 }
