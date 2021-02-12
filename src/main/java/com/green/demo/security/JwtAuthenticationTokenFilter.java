@@ -1,5 +1,6 @@
 package com.green.demo.security;
 
+import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,14 +63,13 @@ public class JwtAuthenticationTokenFilter extends GenericFilterBean {
           }
 
           Long userKey = claims.userKey;
-          String name = claims.name;
           Email email = claims.email;
 
           List<GrantedAuthority> authorities = obtainAuthorities(claims);
 
-          if (nonNull(userKey) && isNotEmpty(name) && nonNull(email) && authorities.size() > 0) {
+          if (nonNull(userKey) && nonNull(email) && authorities.size() > 0) {
             JwtAuthenticationToken authentication =
-              new JwtAuthenticationToken(new JwtAuthentication(userKey, name, email), null, authorities);
+              new JwtAuthenticationToken(new JwtAuthentication(userKey, email), null, authorities);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
           }

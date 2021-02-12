@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -44,7 +45,6 @@ public final class Jwt {
       builder.withExpiresAt(new Date(now.getTime() + expirySeconds * 1_000L));
     }
     builder.withClaim("userKey", claims.userKey);
-    builder.withClaim("name", claims.name);
     builder.withClaim("email", claims.email.getAddress());
     builder.withArrayClaim("roles", claims.roles);
     return builder.sign(algorithm);
@@ -83,7 +83,6 @@ public final class Jwt {
 
   static public class Claims {
     Long userKey;
-    String name;
     Email email;
     String[] roles;
     Date iat;
@@ -96,9 +95,6 @@ public final class Jwt {
       Claim userKey = decodedJWT.getClaim("userKey");
       if (!userKey.isNull())
         this.userKey = userKey.asLong();
-      Claim name = decodedJWT.getClaim("name");
-      if (!name.isNull())
-        this.name = name.asString();
       Claim email = decodedJWT.getClaim("email");
       if (!email.isNull())
         this.email = new Email(email.asString());
@@ -109,10 +105,9 @@ public final class Jwt {
       this.exp = decodedJWT.getExpiresAt();
     }
 
-    public static Claims of(long userKey, String name, Email email, String[] roles) {
+    public static Claims of(long userKey, Email email, String[] roles) {
       Claims claims = new Claims();
       claims.userKey = userKey;
-      claims.name = name;
       claims.email = email;
       claims.roles = roles;
       return claims;
@@ -138,7 +133,6 @@ public final class Jwt {
     public String toString() {
       return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
         .append("userKey", userKey)
-        .append("name", name)
         .append("email", email)
         .append("roles", Arrays.toString(roles))
         .append("iat", iat)
