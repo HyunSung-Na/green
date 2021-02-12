@@ -41,5 +41,4 @@ public class ItemCreateDto {
                 .status(status)
                 .build();
     }
-
 }

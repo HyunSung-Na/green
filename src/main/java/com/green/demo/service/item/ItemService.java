@@ -50,8 +50,8 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    public ItemDto updateItem(String email, Long itemId, ItemUpdateDto updateDto) {
-        User user = userService.findByEmail(new Email(email))
+    public ItemDto updateItem(Email email, Long itemId, ItemUpdateDto updateDto) {
+        User user = userService.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(User.class, email));
 
         Item item = itemRepository.findById(itemId)
@@ -65,8 +65,8 @@ public class ItemService {
         return ItemDto.of(itemRepository.save(item));
     }
 
-    public void deleteItem(String email, Long itemId) {
-        User user = userService.findByEmail(new Email(email))
+    public void deleteItem(Email email, Long itemId) {
+        User user = userService.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(User.class, email));
 
         Item item = itemRepository.findById(itemId)
