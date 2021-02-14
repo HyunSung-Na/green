@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 public class Item {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @Column

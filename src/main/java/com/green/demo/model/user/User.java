@@ -30,7 +30,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public class User {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long seq;
 
   @Column
