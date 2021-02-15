@@ -1,7 +1,7 @@
 package com.green.demo.model.user;
 
 import com.green.demo.error.UnauthorizedException;
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.item.Item;
 import com.green.demo.security.Jwt;
 import lombok.Builder;
@@ -22,7 +22,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
 @Getter

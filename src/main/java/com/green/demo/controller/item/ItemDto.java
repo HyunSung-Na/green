@@ -1,6 +1,6 @@
 package com.green.demo.controller.item;
 
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.item.Item;
 import lombok.Builder;
 import lombok.Getter;

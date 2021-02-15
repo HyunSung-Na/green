@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.demo.controller.user.SignUpRequest;
 import com.green.demo.error.NotFoundException;
 import com.green.demo.mail.EmailService;
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.Role;
 import com.green.demo.model.user.User;

@@ -1,4 +1,4 @@
-package com.green.demo.model;
+package com.green.demo.model.common;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

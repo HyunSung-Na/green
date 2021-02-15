@@ -4,7 +4,7 @@ import com.green.demo.configure.AppProperties;
 import com.green.demo.error.NotFoundException;
 import com.green.demo.mail.EmailMessage;
 import com.green.demo.mail.EmailService;
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.repository.UserRepository;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

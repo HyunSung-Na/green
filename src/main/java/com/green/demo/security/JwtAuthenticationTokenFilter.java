@@ -1,6 +1,5 @@
 package com.green.demo.security;
 
-import com.green.demo.model.Name;
 import com.green.demo.model.user.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ import java.util.regex.Pattern;
 
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class JwtAuthenticationTokenFilter extends GenericFilterBean {
 

@@ -1,6 +1,6 @@
 package com.green.demo.controller.user;
 
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import lombok.Builder;

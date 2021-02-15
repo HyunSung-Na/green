@@ -1,7 +1,7 @@
 package com.green.demo.model.item;
 
 import com.green.demo.controller.item.ItemUpdateDto;
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +29,7 @@ public class Item {
     private String itemName;
 
     @Column
+    @Enumerated
     private Name owner;
 
     @Column

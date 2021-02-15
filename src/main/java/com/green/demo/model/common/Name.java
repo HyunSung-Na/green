@@ -1,4 +1,4 @@
-package com.green.demo.model;
+package com.green.demo.model.common;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

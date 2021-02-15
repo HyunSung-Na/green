@@ -1,7 +1,7 @@
 package com.green.demo.user;
 
 import com.green.demo.error.NotFoundException;
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.service.user.UserService;

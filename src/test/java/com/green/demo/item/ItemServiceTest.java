@@ -3,7 +3,7 @@ package com.green.demo.item;
 import com.green.demo.controller.item.ItemCreateDto;
 import com.green.demo.controller.item.ItemDto;
 import com.green.demo.controller.item.ItemUpdateDto;
-import com.green.demo.model.Name;
+import com.green.demo.model.common.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.service.item.ItemService;
