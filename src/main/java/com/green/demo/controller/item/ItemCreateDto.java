@@ -21,7 +21,7 @@ public class ItemCreateDto {
     private String status;
 
     @Builder
-    private ItemCreateDto(String itemName, Name owner, String description,
+    public ItemCreateDto(String itemName, Name owner, String description,
                          int sellingPrice, int unitSales, String status) {
         this.itemName = itemName;
         this.owner = owner;

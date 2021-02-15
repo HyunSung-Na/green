@@ -20,8 +20,8 @@ public class ItemRestController {
     private final ItemService itemService;
 
     @PostMapping("")
-    public ApiResult<ItemDto> createItem(@RequestBody ItemCreateDto itemCreateDto) {
-        return ApiResult.OK(itemService.createItem(itemCreateDto));
+    public ApiResult<ItemDto> createItem(@RequestBody ItemCreateDto itemCreateDto, @AuthenticationPrincipal JwtAuthentication jwtAuthentication) {
+        return ApiResult.OK(itemService.createItem(itemCreateDto, jwtAuthentication.email));
     }
 
     @GetMapping("info/{itemId}")
@@ -37,7 +37,7 @@ public class ItemRestController {
     }
 
     @PutMapping("{itemId}")
-    public ApiResult<ItemDto> updateItem(@PathVariable Long itemId, ItemUpdateDto updateDto, @AuthenticationPrincipal JwtAuthentication jwtAuthentication) {
+    public ApiResult<ItemDto> updateItem(@PathVariable Long itemId, @RequestBody ItemUpdateDto updateDto, @AuthenticationPrincipal JwtAuthentication jwtAuthentication) {
         return ApiResult.OK(itemService.updateItem(jwtAuthentication.email, itemId, updateDto));
     }
 

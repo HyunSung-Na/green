@@ -61,12 +61,12 @@ public class Item {
     @Builder
     public Item(String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String status, String itemImageUrl) {
-        this(null, itemName, owner, description, sellingPrice, unitSales, itemImageUrl, status, null);
+        this(null, itemName, owner, description, sellingPrice, unitSales, itemImageUrl, status, null, null);
     }
 
     @Builder
     public Item(Long seq, String itemName, Name owner, String description, int sellingPrice,
-                int unitSales, String itemImageUrl, String status, LocalDateTime createAt) {
+                int unitSales, String itemImageUrl, String status, LocalDateTime createAt, User user) {
         this.seq = seq;
         this.itemName = itemName;
         this.owner = owner;
@@ -75,7 +75,8 @@ public class Item {
         this.unitSales = unitSales;
         this.itemImageUrl = itemImageUrl;
         this.status = status;
-        this.createAt = defaultIfNull(createAt, now());;
+        this.createAt = defaultIfNull(createAt, now());
+        this.user = user;
     }
 
     public void update(ItemUpdateDto updateDto) {
@@ -84,6 +85,10 @@ public class Item {
         this.sellingPrice = updateDto.getSellingPrice();
         this.unitSales = updateDto.getUnitSales();
         this.status = updateDto.getStatus();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -115,6 +120,7 @@ public class Item {
                 .append("createAt", createAt)
                 .toString();
     }
+
 
 
 }

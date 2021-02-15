@@ -28,8 +28,13 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final UserService userService;
 
-    public ItemDto createItem(ItemCreateDto createDto) {
+    public ItemDto createItem(ItemCreateDto createDto, Email email) {
+        User user = userService.findByEmail(email)
+                .orElseThrow(() ->new NotFoundException(User.class, email));
+
         Item newItem = createDto.of();
+        newItem.setUser(user);
+
         return ItemDto.of(itemRepository.save(newItem));
     }
 
@@ -77,5 +82,9 @@ public class ItemService {
         }
 
         itemRepository.deleteById(itemId);
+    }
+
+    public Item findByName(String itemName) {
+        return itemRepository.findByItemName(itemName);
     }
 }
