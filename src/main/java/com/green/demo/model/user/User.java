@@ -3,6 +3,7 @@ package com.green.demo.model.user;
 import com.green.demo.error.UnauthorizedException;
 import com.green.demo.model.common.Name;
 import com.green.demo.model.item.Item;
+import com.green.demo.model.review.Review;
 import com.green.demo.security.Jwt;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,6 +64,9 @@ public class User {
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private final List<Item> items = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private final List<Review> reviews = new ArrayList<>();
 
   @Builder
   public User(Name name, Email email, String password) {
@@ -143,6 +147,10 @@ public class User {
     );
 
     this.password = newPassword;
+  }
+
+  public void addReview(Review review) {
+    this.reviews.add(review);
   }
 
   @Override

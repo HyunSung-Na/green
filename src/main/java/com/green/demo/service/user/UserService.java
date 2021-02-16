@@ -116,7 +116,7 @@ public class UserService {
     userRepository.flush();
   }
 
-  private User insert(User user) {
+  public User insert(User user) {
     return userRepository.save(user);
   }
 
