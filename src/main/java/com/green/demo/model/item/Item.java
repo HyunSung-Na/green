@@ -2,6 +2,7 @@ package com.green.demo.model.item;
 
 import com.green.demo.controller.item.ItemUpdateDto;
 import com.green.demo.model.common.Name;
+import com.green.demo.model.review.Review;
 import com.green.demo.model.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
@@ -53,6 +56,9 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    private final List<Review> reviews = new ArrayList<>();
+
     @Builder
     public Item(String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String status) {
@@ -91,6 +97,7 @@ public class Item {
     public void setUser(User user) {
         this.user = user;
     }
+    public void addReview(Review review) { this.reviews.add(review); }
 
     @Override
     public boolean equals(Object o) {
@@ -121,7 +128,4 @@ public class Item {
                 .append("createAt", createAt)
                 .toString();
     }
-
-
-
 }

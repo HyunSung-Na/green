@@ -87,4 +87,15 @@ public class ItemService {
     public Item findByName(String itemName) {
         return itemRepository.findByItemName(itemName);
     }
+
+    public Item findById(Long itemId) {
+        checkNotNull(itemId, "itemId must be provided.");
+
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException(Item.class, itemId));
+    }
+
+    public void insert(Item item) {
+        itemRepository.save(item);
+    }
 }

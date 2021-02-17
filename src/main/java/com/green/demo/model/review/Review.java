@@ -88,8 +88,9 @@ public class Review {
         this.contents = contents;
     }
 
-    public void setUser(User user) {
+    public void setUserAndItem(User user, Item item) {
         this.user = user;
+        this.item = item;
     }
 
     public void commentCountPlus() {
@@ -124,5 +125,4 @@ public class Review {
                 .append("createAt", createAt)
                 .toString();
     }
-
 }

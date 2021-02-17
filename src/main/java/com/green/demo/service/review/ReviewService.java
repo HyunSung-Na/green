@@ -5,10 +5,12 @@ import com.green.demo.controller.review.ReviewDto;
 import com.green.demo.controller.review.ReviewUpdateDto;
 import com.green.demo.error.NotFoundException;
 import com.green.demo.error.UnauthorizedException;
+import com.green.demo.model.item.Item;
 import com.green.demo.model.review.Review;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
 import com.green.demo.repository.ReviewRepository;
+import com.green.demo.service.item.ItemService;
 import com.green.demo.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -27,6 +30,8 @@ public class ReviewService {
 
     private final UserService userService;
 
+    private final ItemService itemService;
+
     private final ReviewRepository reviewRepository;
 
     public ReviewDto writeReview(ReviewCreateDto createDto, Email email) {
@@ -35,10 +40,14 @@ public class ReviewService {
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(Email.class, email));
 
-        Review review = new Review(createDto.getTitle(), createDto.getContents(), user.getName());
-        review.setUser(user);
+        Item item = itemService.findById(createDto.getItemId());
 
+        Review review = new Review(createDto.getTitle(), createDto.getContents(), user.getName());
+        review.setUserAndItem(user, item);
+
+        item.addReview(review);
         user.addReview(review);
+        itemService.insert(item);
         userService.insert(user);
 
         return ReviewDto.of(reviewRepository.save(review));
@@ -93,5 +102,15 @@ public class ReviewService {
         }
 
         reviewRepository.deleteById(reviewId);
+    }
+
+    public Optional<Review> findById(Long reviewId) {
+        checkNotNull(reviewId, "reviewId must be provided.");
+
+        return reviewRepository.findById(reviewId);
+    }
+
+    public Review findByTitle(String title) {
+        return reviewRepository.findByTitle(title);
     }
 }
