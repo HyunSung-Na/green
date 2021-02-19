@@ -113,7 +113,6 @@ public class UserService {
     checkNotNull(userId, "userId must be provided.");
 
     userRepository.deleteById(userId);
-    userRepository.flush();
   }
 
   public User insert(User user) {

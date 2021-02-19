@@ -102,6 +102,7 @@ public class ReviewService {
         }
 
         reviewRepository.deleteById(reviewId);
+        reviewRepository.flush();
     }
 
     public Optional<Review> findById(Long reviewId) {
