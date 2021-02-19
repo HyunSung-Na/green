@@ -57,9 +57,8 @@ public class ItemRestControllerTest {
 
         user = userService.join(name, new Email(email), password);
         apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{Role.USER.value()});
-        TEST_ID = user.getSeq();
-
         item = itemService.createItem(createDto(), user.getEmail());
+        TEST_ID = item.getSeq();
     }
 
     @Test
@@ -75,7 +74,6 @@ public class ItemRestControllerTest {
                 .content(new ObjectMapper().writeValueAsString(itemCreateDto)))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
     @Test
@@ -134,6 +132,12 @@ public class ItemRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
+    }
+
+    @AfterAll
+    void after() {
+        itemService.deleteItem(user.getEmail(), item.getSeq());
+        userService.deleteById(user.getSeq());
     }
 
 

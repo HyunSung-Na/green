@@ -15,6 +15,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
@@ -48,6 +49,9 @@ public class Item {
     private String itemImageUrl;
 
     @Column
+    private int stars;
+
+    @Column
     private String status;
 
     @Column
@@ -68,12 +72,12 @@ public class Item {
     @Builder
     public Item(String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String status, String itemImageUrl) {
-        this(null, itemName, owner, description, sellingPrice, unitSales, itemImageUrl, status, null, null);
+        this(null, itemName, owner, description, sellingPrice, unitSales, itemImageUrl, 0, status, null, null);
     }
 
     @Builder
     public Item(Long seq, String itemName, Name owner, String description, int sellingPrice,
-                int unitSales, String itemImageUrl, String status, LocalDateTime createAt, User user) {
+                int unitSales, String itemImageUrl, int stars, String status, LocalDateTime createAt, User user) {
         this.seq = seq;
         this.itemName = itemName;
         this.owner = owner;
@@ -81,6 +85,7 @@ public class Item {
         this.sellingPrice = sellingPrice;
         this.unitSales = unitSales;
         this.itemImageUrl = itemImageUrl;
+        this.stars = stars;
         this.status = status;
         this.createAt = defaultIfNull(createAt, now());
         this.user = user;
@@ -98,6 +103,10 @@ public class Item {
         this.user = user;
     }
     public void addReview(Review review) { this.reviews.add(review); }
+    public void avgStars() {
+        int sumStars = this.reviews.stream().mapToInt(review -> review.getStar().getStar()).sum();
+        this.stars = sumStars / this.reviews.size();
+    }
 
     @Override
     public boolean equals(Object o) {
