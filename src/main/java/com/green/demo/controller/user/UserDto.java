@@ -50,7 +50,7 @@ public class UserDto {
 
     public static UserDto of(User user) {
         return UserDto.builder()
-                .id(user.getSeq())
+                .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImageUrl())

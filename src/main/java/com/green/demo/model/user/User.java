@@ -1,6 +1,7 @@
 package com.green.demo.model.user;
 
 import com.green.demo.error.UnauthorizedException;
+import com.green.demo.model.comment.Comment;
 import com.green.demo.model.common.Name;
 import com.green.demo.model.item.Item;
 import com.green.demo.model.review.Review;
@@ -31,7 +32,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long seq;
+  private Long id;
 
   @Column
   @Enumerated
@@ -68,6 +69,9 @@ public class User {
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private final List<Review> reviews = new ArrayList<>();
 
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private final List<Comment> comments = new ArrayList<>();
+
   @Builder
   public User(Name name, Email email, String password) {
     this(name, email, password, null);
@@ -79,7 +83,7 @@ public class User {
   }
 
   @Builder
-  public User(Long seq, Name name, Email email, String password, String profileImageUrl, int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
+  public User(Long id, Name name, Email email, String password, String profileImageUrl, int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
     checkNotNull(email, "email must be provided.");
     checkNotNull(password, "password must be provided.");
     checkArgument(
@@ -87,7 +91,7 @@ public class User {
       "profileImageUrl length must be less than 255 characters."
     );
 
-    this.seq = seq;
+    this.id = id;
     this.name = name;
     this.email = email;
     this.password = password;
@@ -119,7 +123,7 @@ public class User {
   }
 
   public String newApiToken(Jwt jwt, String[] roles) {
-    Jwt.Claims claims = Jwt.Claims.of(seq, email, roles);
+    Jwt.Claims claims = Jwt.Claims.of(id, email, roles);
     return jwt.newToken(claims);
   }
 
@@ -158,18 +162,18 @@ public class User {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     User user = (User) o;
-    return Objects.equals(seq, user.seq);
+    return Objects.equals(id, user.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(seq);
+    return Objects.hash(id);
   }
 
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-      .append("seq", seq)
+      .append("id", id)
       .append("name", name)
       .append("email", email)
       .append("password", "[PROTECTED]")

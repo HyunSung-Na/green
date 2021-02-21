@@ -9,7 +9,7 @@ import com.green.demo.model.item.Item;
 import com.green.demo.model.review.Review;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
-import com.green.demo.repository.ReviewRepository;
+import com.green.demo.repository.review.ReviewRepository;
 import com.green.demo.service.item.ItemService;
 import com.green.demo.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -113,5 +113,9 @@ public class ReviewService {
 
     public Review findByTitle(String title) {
         return reviewRepository.findByTitle(title);
+    }
+
+    public void insert(Review review) {
+        reviewRepository.save(review);
     }
 }

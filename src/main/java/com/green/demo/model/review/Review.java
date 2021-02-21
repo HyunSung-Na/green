@@ -1,5 +1,6 @@
 package com.green.demo.model.review;
 
+import com.green.demo.model.comment.Comment;
 import com.green.demo.model.common.Name;
 import com.green.demo.model.item.Item;
 import com.green.demo.model.common.Star;
@@ -14,6 +15,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
@@ -25,7 +28,7 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long id;
 
     @Column
     private String title;
@@ -57,6 +60,9 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private final List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Review(String title, String contents, Name writer) {
         this(null, title, contents, writer, null, 0, new Star(0), null, null, null);
@@ -69,9 +75,9 @@ public class Review {
     }
 
     @Builder
-    public Review(Long seq, String title, String contents, Name writer, String reviewImageUrl,
+    public Review(Long id, String title, String contents, Name writer, String reviewImageUrl,
                   int commentCount, Star star, LocalDateTime createAt, User user, Item item) {
-        this.seq = seq;
+        this.id = id;
         this.title = title;
         this.contents = contents;
         this.writer = writer;
@@ -105,12 +111,12 @@ public class Review {
 
         Review review = (Review) o;
 
-        return new EqualsBuilder().append(commentCount, review.commentCount).append(seq, review.seq).append(title, review.title).append(contents, review.contents).append(writer, review.writer).append(reviewImageUrl, review.reviewImageUrl).append(star, review.star).append(createAt, review.createAt).isEquals();
+        return new EqualsBuilder().append(commentCount, review.commentCount).append(id, review.id).append(title, review.title).append(contents, review.contents).append(writer, review.writer).append(reviewImageUrl, review.reviewImageUrl).append(star, review.star).append(createAt, review.createAt).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(seq).append(title).append(contents).append(writer).append(reviewImageUrl).append(commentCount).append(star).append(createAt).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(title).append(contents).append(writer).append(reviewImageUrl).append(commentCount).append(star).append(createAt).toHashCode();
     }
 
     @Override

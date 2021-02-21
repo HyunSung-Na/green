@@ -64,7 +64,7 @@ public class UserRestControllerTest {
 
         User user = userService.join(name, new Email(email), password);
         apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{Role.USER.value()});
-        TEST_ID = user.getSeq();
+        TEST_ID = user.getId();
     }
 
     @Test

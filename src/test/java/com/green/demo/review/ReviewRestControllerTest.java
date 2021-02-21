@@ -65,7 +65,7 @@ public class ReviewRestControllerTest {
 
         item = itemService.createItem(createDto(), user.getEmail());
         review = reviewService.writeReview(reviewCreateDto(), user.getEmail());
-        TEST_ID = review.getSeq();
+        TEST_ID = review.getId();
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ReviewRestControllerTest {
                 .contents("contents update")
                 .build();
 
-        mockMvc.perform(put(API_ITEM_URL + review.getSeq())
+        mockMvc.perform(put(API_ITEM_URL + review.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("api_key", apiToken)
@@ -138,9 +138,9 @@ public class ReviewRestControllerTest {
 
     @AfterAll
     void after() {
-        reviewService.deleteReview(review.getSeq(), user.getEmail());
-        itemService.deleteItem(user.getEmail(), item.getSeq());
-        userService.deleteById(user.getSeq());
+        reviewService.deleteReview(review.getId(), user.getEmail());
+        itemService.deleteItem(user.getEmail(), item.getId());
+        userService.deleteById(user.getId());
     }
 
 
@@ -151,7 +151,7 @@ public class ReviewRestControllerTest {
         return ReviewCreateDto.builder()
                 .title(title)
                 .contents(contents)
-                .itemId(item.getSeq())
+                .itemId(item.getId())
                 .build();
     }
 

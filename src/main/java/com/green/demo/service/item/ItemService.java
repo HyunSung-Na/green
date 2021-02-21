@@ -8,7 +8,7 @@ import com.green.demo.error.UnauthorizedException;
 import com.green.demo.model.item.Item;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
-import com.green.demo.repository.ItemRepository;
+import com.green.demo.repository.item.ItemRepository;
 import com.green.demo.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

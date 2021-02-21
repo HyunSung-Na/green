@@ -58,7 +58,7 @@ public class ItemRestControllerTest {
         user = userService.join(name, new Email(email), password);
         apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{Role.USER.value()});
         item = itemService.createItem(createDto(), user.getEmail());
-        TEST_ID = item.getSeq();
+        TEST_ID = item.getId();
     }
 
     @Test
@@ -88,7 +88,7 @@ public class ItemRestControllerTest {
                 .unitSales(1)
                 .build();
 
-        mockMvc.perform(put(API_ITEM_URL + item.getSeq())
+        mockMvc.perform(put(API_ITEM_URL + item.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("api_key", apiToken)
@@ -136,8 +136,8 @@ public class ItemRestControllerTest {
 
     @AfterAll
     void after() {
-        itemService.deleteItem(user.getEmail(), item.getSeq());
-        userService.deleteById(user.getSeq());
+        itemService.deleteItem(user.getEmail(), item.getId());
+        userService.deleteById(user.getId());
     }
 
 

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ReviewDto {
 
-    private Long seq;
+    private Long id;
 
     private String title;
 
@@ -30,9 +30,9 @@ public class ReviewDto {
     private LocalDateTime createAt;
 
     @Builder
-    private ReviewDto(Long seq, String title, String contents, Name writer,
+    private ReviewDto(Long id, String title, String contents, Name writer,
                      String reviewImageUrl, int commentCount, Star star, LocalDateTime createAt) {
-        this.seq = seq;
+        this.id = id;
         this.title = title;
         this.contents = contents;
         this.writer = writer;
@@ -45,7 +45,7 @@ public class ReviewDto {
     public static ReviewDto of(Review review) {
 
         return ReviewDto.builder()
-                .seq(review.getSeq())
+                .id(review.getId())
                 .title(review.getTitle())
                 .contents(review.getContents())
                 .writer(review.getWriter())

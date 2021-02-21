@@ -45,7 +45,7 @@ public class UserServiceTest {
     void 사용자를_추가한다() {
         User user = userService.join(name, email, password);
         assertThat(user, is(notNullValue()));
-        assertThat(user.getSeq(), is(notNullValue()));
+        assertThat(user.getId(), is(notNullValue()));
         assertThat(user.getEmail(), is(email));
         log.info("Inserted user: {}", user);
     }
@@ -86,7 +86,7 @@ public class UserServiceTest {
     void 회원_탈퇴를_한다() {
         User user = userService.findByEmail(email).orElseThrow(
                 () -> new NotFoundException(User.class, email));
-        userService.deleteById(user.getSeq());
+        userService.deleteById(user.getId());
         assertThat(user, is(notNullValue()));
     }
 }

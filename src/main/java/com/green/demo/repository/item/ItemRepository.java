@@ -1,4 +1,4 @@
-package com.green.demo.repository;
+package com.green.demo.repository.item;
 
 import com.green.demo.model.item.Item;
 import org.springframework.data.jpa.repository.JpaRepository;

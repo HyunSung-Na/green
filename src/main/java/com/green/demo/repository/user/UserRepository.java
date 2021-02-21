@@ -1,4 +1,4 @@
-package com.green.demo.repository;
+package com.green.demo.repository.user;
 
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;

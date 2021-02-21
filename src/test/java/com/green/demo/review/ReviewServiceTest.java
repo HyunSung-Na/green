@@ -62,7 +62,7 @@ public class ReviewServiceTest {
         review = reviewService.writeReview(createDto(), user.getEmail());
 
         assertThat(review, is(notNullValue()));
-        assertThat(review.getSeq(), is(notNullValue()));
+        assertThat(review.getId(), is(notNullValue()));
         log.info("Inserted review: {}", review);
     }
 
@@ -74,9 +74,9 @@ public class ReviewServiceTest {
                 .contents("newUpdate contents")
                 .build();
 
-        review = reviewService.updateReview(updateDto, user.getEmail(), review.getSeq());
+        review = reviewService.updateReview(updateDto, user.getEmail(), review.getId());
         assertThat(review, is(notNullValue()));
-        assertThat(review.getSeq(), is(notNullValue()));
+        assertThat(review.getId(), is(notNullValue()));
         assertThat(review.getTitle(), is("reviewUpdate"));
         assertThat(review.getContents(), is("newUpdate contents"));
         log.info("Update review: {}", review);
@@ -85,10 +85,10 @@ public class ReviewServiceTest {
     @Test
     @Order(3)
     void 리뷰조회() throws Exception{
-        ReviewDto newReview = reviewService.reviewDetail(review.getSeq());
+        ReviewDto newReview = reviewService.reviewDetail(review.getId());
         assertThat(newReview.getTitle(), is(review.getTitle()));
         assertThat(newReview.getContents(), is(review.getContents()));
-        assertThat(newReview.getSeq(), is(review.getSeq()));
+        assertThat(newReview.getId(), is(review.getId()));
         log.info("view reviewDetail: {}", review);
     }
 
@@ -105,15 +105,15 @@ public class ReviewServiceTest {
     @Test
     @Order(5)
     void 리뷰삭제() throws Exception{
-        reviewService.deleteReview(review.getSeq(), user.getEmail());
+        reviewService.deleteReview(review.getId(), user.getEmail());
         assertThat(reviewService.findByTitle(review.getTitle()), is(nullValue()));
         log.info("delete review: {}", review);
     }
 
     @AfterAll
     void after() {
-        itemService.deleteItem(user.getEmail(), item.getSeq());
-        userService.deleteById(user.getSeq());
+        itemService.deleteItem(user.getEmail(), item.getId());
+        userService.deleteById(user.getId());
     }
 
     private ReviewCreateDto createDto() {
@@ -123,7 +123,7 @@ public class ReviewServiceTest {
         return ReviewCreateDto.builder()
                 .title(title)
                 .contents(contents)
-                .itemId(item.getSeq())
+                .itemId(item.getId())
                 .build();
     }
 

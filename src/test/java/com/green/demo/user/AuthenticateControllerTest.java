@@ -60,7 +60,7 @@ public class AuthenticateControllerTest {
 
         user = userService.join(name, new Email(principal), credentials);
         apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{Role.USER.value()});
-        TEST_ID = user.getSeq();
+        TEST_ID = user.getId();
     }
 
     @Test

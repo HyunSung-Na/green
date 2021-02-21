@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ItemDto {
 
-    private Long seq;
+    private Long id;
 
     private String itemName;
 
@@ -31,9 +31,9 @@ public class ItemDto {
     private LocalDateTime createAt;
 
     @Builder
-    private ItemDto(Long seq, String itemName, Name owner, String description, int sellingPrice,
+    private ItemDto(Long id, String itemName, Name owner, String description, int sellingPrice,
                    int unitSales, String itemImageUrl, String status, LocalDateTime createAt) {
-        this.seq = seq;
+        this.id = id;
         this.itemName = itemName;
         this.owner = owner;
         this.description = description;
@@ -47,7 +47,7 @@ public class ItemDto {
     public static ItemDto of(Item item) {
 
         return ItemDto.builder()
-                .seq(item.getSeq())
+                .id(item.getId())
                 .itemName(item.getItemName())
                 .owner(item.getOwner())
                 .description(item.getDescription())

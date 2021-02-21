@@ -54,7 +54,7 @@ public class ItemServiceTest {
         item = itemService.createItem(createDto(), user.getEmail());
 
         assertThat(item, is(notNullValue()));
-        assertThat(item.getSeq(), is(notNullValue()));
+        assertThat(item.getId(), is(notNullValue()));
         log.info("Inserted item: {}", item);
     }
 
@@ -69,7 +69,7 @@ public class ItemServiceTest {
                 .unitSales(1)
                 .build();
 
-        item = itemService.updateItem(user.getEmail(), item.getSeq(), updateDto);
+        item = itemService.updateItem(user.getEmail(), item.getId(), updateDto);
         assertThat(item, is(notNullValue()));
         assertThat(item.getItemName(), is("용월금"));
         assertThat(item.getDescription(), is("새로운 다육이!"));
@@ -82,7 +82,7 @@ public class ItemServiceTest {
     @Test
     @Order(3)
     void 상품조회() throws Exception{
-        ItemDto itemDetail = itemService.detailItem(item.getSeq());
+        ItemDto itemDetail = itemService.detailItem(item.getId());
         assertThat(itemDetail, is(notNullValue()));
         log.info("view item: {}", itemDetail);
     }
@@ -100,14 +100,14 @@ public class ItemServiceTest {
     @Test
     @Order(5)
     void 상품삭제() throws Exception{
-        itemService.deleteItem(user.getEmail(), item.getSeq());
+        itemService.deleteItem(user.getEmail(), item.getId());
         assertThat(itemService.findByName(item.getItemName()), is(nullValue()));
         log.info("delete item: {}", item);
     }
 
     @AfterAll
     void after() {
-        userService.deleteById(user.getSeq());
+        userService.deleteById(user.getId());
     }
 
     private ItemCreateDto createDto() {

@@ -27,7 +27,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long id;
 
     @Column
     private String itemName;
@@ -76,9 +76,9 @@ public class Item {
     }
 
     @Builder
-    public Item(Long seq, String itemName, Name owner, String description, int sellingPrice,
+    public Item(Long id, String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String itemImageUrl, int stars, String status, LocalDateTime createAt, User user) {
-        this.seq = seq;
+        this.id = id;
         this.itemName = itemName;
         this.owner = owner;
         this.description = description;
@@ -102,8 +102,12 @@ public class Item {
     public void setUser(User user) {
         this.user = user;
     }
-    public void addReview(Review review) { this.reviews.add(review); }
-    public void avgStars() {
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        avgStars();
+    }
+
+    private void avgStars() {
         int sumStars = this.reviews.stream().mapToInt(review -> review.getStar().getStar()).sum();
         this.stars = sumStars / this.reviews.size();
     }
@@ -116,12 +120,12 @@ public class Item {
 
         Item item = (Item) o;
 
-        return new EqualsBuilder().append(sellingPrice, item.sellingPrice).append(unitSales, item.unitSales).append(seq, item.seq).append(itemName, item.itemName).append(owner, item.owner).append(description, item.description).append(itemImageUrl, item.itemImageUrl).append(status, item.status).append(createAt, item.createAt).isEquals();
+        return new EqualsBuilder().append(sellingPrice, item.sellingPrice).append(unitSales, item.unitSales).append(id, item.id).append(itemName, item.itemName).append(owner, item.owner).append(description, item.description).append(itemImageUrl, item.itemImageUrl).append(status, item.status).append(createAt, item.createAt).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(seq).append(itemName).append(owner).append(description).append(sellingPrice).append(unitSales).append(itemImageUrl).append(status).append(createAt).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(itemName).append(owner).append(description).append(sellingPrice).append(unitSales).append(itemImageUrl).append(status).append(createAt).toHashCode();
     }
 
     @Override

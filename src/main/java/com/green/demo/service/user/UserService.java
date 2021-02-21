@@ -7,7 +7,7 @@ import com.green.demo.mail.EmailService;
 import com.green.demo.model.common.Name;
 import com.green.demo.model.user.Email;
 import com.green.demo.model.user.User;
-import com.green.demo.repository.UserRepository;
+import com.green.demo.repository.user.UserRepository;
 import com.green.demo.security.JwtAuthentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
