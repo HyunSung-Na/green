@@ -18,8 +18,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
 @Getter
@@ -77,6 +79,19 @@ public class Review {
     @Builder
     public Review(Long id, String title, String contents, Name writer, String reviewImageUrl,
                   int commentCount, Star star, LocalDateTime createAt, User user, Item item) {
+
+        checkArgument(isNotEmpty(title), "title must be provided.");
+        checkArgument(
+                title.length() >= 2 && title.length() <= 50,
+                "review title length must be between 2 and 50 characters."
+        );
+
+        checkArgument(isNotEmpty(contents), "contents must be provided.");
+        checkArgument(
+                contents.length() >= 4 && contents.length() <= 500,
+                "review contents length must be between 4 and 500 characters."
+        );
+
         this.id = id;
         this.title = title;
         this.contents = contents;
@@ -90,6 +105,19 @@ public class Review {
     }
 
     public void apply(String title, String contents) {
+
+        checkArgument(isNotEmpty(title), "title must be provided.");
+        checkArgument(
+                title.length() >= 2 && title.length() <= 50,
+                "review title length must be between 2 and 50 characters."
+        );
+
+        checkArgument(isNotEmpty(contents), "contents must be provided.");
+        checkArgument(
+                contents.length() >= 4 && contents.length() <= 500,
+                "review contents length must be between 4 and 500 characters."
+        );
+
         this.title = title;
         this.contents = contents;
     }

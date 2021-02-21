@@ -16,8 +16,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
 @Getter
@@ -64,6 +66,13 @@ public class Comment {
     @Builder
     public Comment(Long id, String contents, Name writer, Integer level,
                    Boolean live, Review review, User user, Comment superComment) {
+
+        checkArgument(isNotEmpty(contents), "contents must be provided.");
+        checkArgument(
+                contents.length() >= 4 && contents.length() <= 255,
+                "comment contents length must be between 4 and 255 characters."
+        );
+
         this.id = id;
         this.contents = contents;
         this.writer = writer;
@@ -77,6 +86,12 @@ public class Comment {
     }
 
     public void apply(String contents) {
+        checkArgument(isNotEmpty(contents), "contents must be provided.");
+        checkArgument(
+                contents.length() >= 4 && contents.length() <= 255,
+                "comment contents length must be between 4 and 255 characters."
+        );
+
         this.contents = contents;
         this.modifyAt = defaultIfNull(createAt, now());
     }

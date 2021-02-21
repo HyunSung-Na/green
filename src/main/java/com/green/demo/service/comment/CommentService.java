@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -30,6 +32,8 @@ public class CommentService {
     private final ReviewService reviewService;
 
     public CommentDto write(CommentCreateDto createDto, Long userId) {
+        checkNotNull(userId, "userId must be provided.");
+
         User user = userService.findById(userId)
                 .orElseThrow(() -> new NotFoundException(User.class, userId));
         Review review = reviewService.findById(createDto.getReviewId())
@@ -95,6 +99,9 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentDto> reviewDetail(Long reviewId) {
+        checkNotNull(reviewId, "reviewId must be provided.");
+
+
         List<Comment> comments = commentRepository.findReviewByIdWithComments(reviewId);
         if (comments.size() == 0) {
             return Collections.emptyList();
@@ -106,6 +113,8 @@ public class CommentService {
     }
 
     public CommentDto update(CommentUpdateDto updateDto, Long userId) {
+        checkNotNull(userId, "userId must be provided.");
+
         Comment comment = commentRepository.findById(updateDto.getCommentId())
                 .orElseThrow(() -> new NotFoundException(Comment.class, updateDto.getCommentId()));
 
@@ -118,6 +127,8 @@ public class CommentService {
     }
 
     public void delete(Long commentId, Long userId) {
+        checkNotNull(userId, "userId must be provided.");
+        checkNotNull(commentId, "commentId must be provided.");
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(Comment.class, commentId));

@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
 @Getter
@@ -78,6 +80,18 @@ public class Item {
     @Builder
     public Item(Long id, String itemName, Name owner, String description, int sellingPrice,
                 int unitSales, String itemImageUrl, int stars, String status, LocalDateTime createAt, User user) {
+        checkArgument(isNotEmpty(itemName), "itemName must be provided.");
+        checkArgument(
+                itemName.length() >= 2 && itemName.length() <= 50,
+                "itemName length must be between 2 and 50 characters."
+        );
+
+        checkArgument(isNotEmpty(description), "description must be provided.");
+        checkArgument(
+                description.length() >= 2 && description.length() <= 1000,
+                "description length must be between 2 and 1000 characters."
+        );
+
         this.id = id;
         this.itemName = itemName;
         this.owner = owner;
@@ -92,6 +106,19 @@ public class Item {
     }
 
     public void update(ItemUpdateDto updateDto) {
+
+        checkArgument(isNotEmpty(itemName), "itemName must be provided.");
+        checkArgument(
+                itemName.length() >= 2 && itemName.length() <= 50,
+                "itemName length must be between 2 and 50 characters."
+        );
+
+        checkArgument(isNotEmpty(description), "description must be provided.");
+        checkArgument(
+                description.length() >= 2 && description.length() <= 1000,
+                "description length must be between 2 and 1000 characters."
+        );
+
         this.itemName = updateDto.getItemName();
         this.description = updateDto.getDescription();
         this.sellingPrice = updateDto.getSellingPrice();
