@@ -73,6 +73,11 @@ public class Comment {
                 "comment contents length must be between 4 and 255 characters."
         );
 
+        checkArgument(
+                level >= 0 && level <= 2,
+                "level must be between 0 and 2"
+        );
+
         this.id = id;
         this.contents = contents;
         this.writer = writer;

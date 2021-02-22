@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -138,5 +139,14 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+        commentRepository.flush();
+    }
+
+    public Optional<Comment> findById(Long commentId) {
+        return commentRepository.findById(commentId);
+    }
+
+    public Comment findByContents(String contents) {
+        return commentRepository.findByContents(contents);
     }
 }
