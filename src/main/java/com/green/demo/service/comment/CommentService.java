@@ -102,7 +102,6 @@ public class CommentService {
     public List<CommentDto> reviewDetail(Long reviewId) {
         checkNotNull(reviewId, "reviewId must be provided.");
 
-
         List<Comment> comments = commentRepository.findReviewByIdWithComments(reviewId);
         if (comments.size() == 0) {
             return Collections.emptyList();
