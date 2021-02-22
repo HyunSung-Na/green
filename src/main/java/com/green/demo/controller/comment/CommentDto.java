@@ -52,6 +52,8 @@ public class CommentDto {
                 .level(comment.getLevel())
                 .writer(comment.getWriter())
                 .live(comment.getLive())
+                .createAt(comment.getCreateAt())
+                .modifyAt(comment.getModifyAt())
                 .reviewId(comment.getReview().getId())
                 .superCommentId((comment.getSuperComment() == null) ? null : comment.getSuperComment().getId())
                 .build();

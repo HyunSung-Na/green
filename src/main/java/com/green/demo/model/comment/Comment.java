@@ -60,11 +60,11 @@ public class Comment {
     @Builder
     public Comment(String contents, Name writer, Integer level,
                    Boolean live, Review review, User user, Comment superComment) {
-        this(null, contents, writer, level, live, review, user, superComment);
+        this(null, contents, writer, level, defaultIfNull(null, now()), defaultIfNull(null, now()), live, review, user, superComment);
     }
 
     @Builder
-    public Comment(Long id, String contents, Name writer, Integer level,
+    public Comment(Long id, String contents, Name writer, Integer level, LocalDateTime createAt, LocalDateTime modifyAt,
                    Boolean live, Review review, User user, Comment superComment) {
 
         checkArgument(isNotEmpty(contents), "contents must be provided.");
@@ -84,7 +84,7 @@ public class Comment {
         this.level = level;
         this.live = live;
         this.createAt = defaultIfNull(createAt, now());
-        this.modifyAt = defaultIfNull(createAt, now());
+        this.modifyAt = defaultIfNull(modifyAt, now());
         this.review = review;
         this.user = user;
         this.superComment = superComment;
@@ -98,7 +98,7 @@ public class Comment {
         );
 
         this.contents = contents;
-        this.modifyAt = defaultIfNull(createAt, now());
+        this.modifyAt = defaultIfNull(null, now());
     }
 
     @Override
