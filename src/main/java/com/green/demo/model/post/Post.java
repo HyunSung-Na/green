@@ -14,6 +14,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.time.LocalDateTime.now;
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -49,17 +54,53 @@ public class Post {
     private User user;
 
     @Builder
+    public Post(String title, String contents, Name writer, User user) {
+        this(null, title, contents, writer, null, 0, null, null, user);
+    }
+
+    @Builder
     public Post(Long id, String title, String contents, Name writer, String thumbnail,
                 int commentCount, LocalDateTime createAt, LocalDateTime modifyAt, User user) {
+
+        checkArgument(isNotEmpty(title), "title must be provided.");
+        checkArgument(
+                title.length() >= 2 && title.length() <= 50,
+                "post title length must be between 2 and 50 characters."
+        );
+
+        checkArgument(isNotEmpty(contents), "contents must be provided.");
+        checkArgument(
+                contents.length() >= 4 && contents.length() <= 500,
+                "post contents length must be between 4 and 500 characters."
+        );
+
         this.id = id;
         this.title = title;
         this.contents = contents;
         this.writer = writer;
         this.thumbnail = thumbnail;
         this.commentCount = commentCount;
-        this.createAt = createAt;
-        this.modifyAt = modifyAt;
+        this.createAt = defaultIfNull(createAt, now());;
+        this.modifyAt = defaultIfNull(modifyAt, now());;
         this.user = user;
+    }
+
+    public void apply(String title, String contents) {
+
+        checkArgument(isNotEmpty(title), "title must be provided.");
+        checkArgument(
+                title.length() >= 2 && title.length() <= 50,
+                "post title length must be between 2 and 50 characters."
+        );
+
+        checkArgument(isNotEmpty(contents), "contents must be provided.");
+        checkArgument(
+                contents.length() >= 4 && contents.length() <= 500,
+                "post contents length must be between 4 and 500 characters."
+        );
+
+        this.title = title;
+        this.contents = contents;
     }
 
     @Override
