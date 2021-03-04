@@ -31,3 +31,16 @@
     border: 0;
     cursor: pointer;
 }
+
+.signUp {
+    position: absolute;
+    right: 9em;
+    top: 1em;
+    padding: 0.8em;
+    border-radius: 20%;
+    background-color: makerBlack;
+    color: makerWhite;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+}
