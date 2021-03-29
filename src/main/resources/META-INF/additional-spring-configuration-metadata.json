@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.application.messages.basename",
+      "type": "java.lang.String",
+      "description": "Description for spring.application.messages.basename."
+  }
+] }

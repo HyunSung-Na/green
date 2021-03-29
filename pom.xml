@@ -210,6 +210,65 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.8.0</version> <!-- frontend-maven-plugin Version -->
+                <configuration>
+                    <workingDirectory>green-frontend</workingDirectory> <!-- React JS 가 설치된 디렉토리 -->
+                    <installDirectory>target</installDirectory> <!-- war & jar 가 생성되는 메이븐 빌드의 타겟 디렉토리 -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal> <!-- node & npm 설치 -->
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v12.18.3</nodeVersion> <!-- 설치할 nodeJs 의 버전 -->
+                            <npmVersion>6.14.8</npmVersion>  <!-- 설치할 npm 의 버전 -->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>    <!-- npm install 로 package.json 의 모듈을 설치한다. -->
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm run build</id>  <!-- React Js Build -->
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}/classes/public">
+                                    <fileset dir="${project.basedir}/green-frontend/build"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <repositories>
