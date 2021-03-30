@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN } from '../constants';
+import { ACCESS_TOKEN } from '../util/constants';
 import axios from 'axios'
 
 export const request = (options) => {

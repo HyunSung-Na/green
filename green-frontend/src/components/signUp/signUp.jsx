@@ -2,10 +2,11 @@ import {useCallback, useRef, useState} from 'react';
 import styles from './signUp.module.css';
 import Button from "../button/button";
 import axios from "axios";
-import {API_BASE_URL} from "../../constants";
+import {API_BASE_URL} from "../../util/constants";
 import Header from "../header/header";
 import Footer from "../footer/footer";
 import styled from "@emotion/styled";
+import useInput from "../../util/useInput";
 
 const Label = styled.label`
   margin-bottom: 16px;
@@ -26,20 +27,19 @@ const Error = styled.div`
   font-weight: bold;
 `;
 
+export const Success = styled.div`
+  color: #2eb67d;
+  font-weight: bold;
+`;
+
 const SignUp = (props) => {
-    const [name, setName] = useState('');
+    const [name, onChangeName, setName] = useInput('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
+    const [email, onChangeEmail, setEmail] = useInput('');
     const [passwordCheck, setPasswordCheck] = useState('');
     const [mismatchError, setMismatchError] = useState(false);
-
-    const onChangeName = useCallback((e) => {
-        setName(e.target.value);
-    }, []);
-
-    const onChangeEmail = useCallback((e) => {
-        setEmail(e.target.value);
-    }, []);
+    const [signUpError, setSignUpError] = useState('');
+    const [signUpSuccess, setSignUpSuccess] = useState(false);
 
     const onChangePassword = useCallback((e) => {
         setPassword(e.target.value);
@@ -55,6 +55,8 @@ const SignUp = (props) => {
 
     const onSubmit = event => {
         event.preventDefault();
+        setSignUpSuccess(false);
+
         const signUpForm = {
             name: name || '',
             email: email || '',
@@ -73,10 +75,14 @@ const SignUp = (props) => {
                 "name": signUpForm.name,
                 "principal": signUpForm.email,
                 "credentials": signUpForm.password
-            }
+            },
         }).then( response => {
                 console.log(response.data);
-            })
+                setSignUpSuccess(true);
+        }).catch((error) => {
+                console.log(error.response);
+                setSignUpError(error.response.data);
+        })
 
         formRef.current.reset();
     };
@@ -94,6 +100,8 @@ const SignUp = (props) => {
                 </div>
                 <Label>
                     {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
+                    {signUpError && <Error>{signUpError}</Error>}
+                    {signUpSuccess && <Success>회원가입 되었습니다. 로그인해주세요.</Success>}
                 </Label>
             </form>
             <Footer />
