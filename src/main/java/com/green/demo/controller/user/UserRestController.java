@@ -53,8 +53,16 @@ public class UserRestController {
                     .orElseThrow(() -> new NotFoundException(User.class, userId)));
     }
 
+    @GetMapping("user")
+    public ApiResult<UserDto> infoMe(@AuthenticationPrincipal JwtAuthentication jwtAuthentication) {
+        return ApiResult.OK(
+                userService.findById(jwtAuthentication.id)
+                .map(UserDto::of)
+                .orElseThrow(() -> new NotFoundException(User.class, jwtAuthentication.email)));
+    }
+
     @GetMapping("user/info/list")
-    public ApiResult<List<UserDto>> infoList(int page, int size) {
+    public ApiResult<List<UserDto>> infoList(@RequestParam int page, @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return ApiResult.OK(
             userService.users(pageRequest).stream()
@@ -64,13 +72,13 @@ public class UserRestController {
     }
 
     @PostMapping("user/exists")
-    public ApiResult<Boolean> checkEmail(Map<String, String> request) {
+    public ApiResult<Boolean> checkEmail(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         return ApiResult.OK(userService.checkFindByEmail(new Email(email)).isPresent());
     }
 
     @PostMapping("user/settings/password")
-    public ResponseEntity<?> updatePassword(@AuthenticationPrincipal JwtAuthentication jwtAuthentication, String newPassword) {
+    public ResponseEntity<?> updatePassword(@AuthenticationPrincipal JwtAuthentication jwtAuthentication, @RequestBody String newPassword) {
         userService.updatePassword(jwtAuthentication, newPassword);
         return ResponseEntity.ok().build();
     }
