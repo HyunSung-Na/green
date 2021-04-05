@@ -6,7 +6,8 @@ import {API_BASE_URL} from "../../util/constants";
 import Header from "../header/header";
 import Footer from "../footer/footer";
 import styled from "@emotion/styled";
-import useInput from "../../util/useInput";
+import useInput from "../../util/useInput.js";
+import {useHistory} from "react-router";
 
 const Label = styled.label`
   margin-bottom: 16px;
@@ -40,6 +41,7 @@ const SignUp = (props) => {
     const [mismatchError, setMismatchError] = useState(false);
     const [signUpError, setSignUpError] = useState('');
     const [signUpSuccess, setSignUpSuccess] = useState(false);
+    const history = useHistory();
 
     const onChangePassword = useCallback((e) => {
         setPassword(e.target.value);
@@ -51,7 +53,12 @@ const SignUp = (props) => {
         setMismatchError(e.target.value !== password);
     }, [password]);
 
-    const formRef = useRef();
+    const goToHome = (userData) => {
+        history.push({
+            pathname: '/',
+            state: {data: userData},
+        });
+    };
 
     const onSubmit = event => {
         event.preventDefault();
@@ -79,18 +86,17 @@ const SignUp = (props) => {
         }).then( response => {
                 console.log(response.data);
                 setSignUpSuccess(true);
+                goToHome(response.data);
         }).catch((error) => {
                 console.log(error.response);
                 setSignUpError(error.response.data);
         })
-
-        formRef.current.reset();
     };
 
     return (
         <div className={styles.container}>
             <Header />
-            <form ref={formRef} className={styles.form}>
+            <form className={styles.form}>
                 <div className={styles.list}>
                     <input className={styles.input} type="text" name="name" value={name} onChange={onChangeName} placeholder="Name"/>
                     <input className={styles.input} type="text" name="email" value={email} onChange={onChangeEmail} placeholder="Email"/>

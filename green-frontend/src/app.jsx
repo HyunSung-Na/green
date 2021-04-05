@@ -3,6 +3,7 @@ import styles from './app.module.css';
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import Green from "./components/green/green";
 import SignUp from "./components/signUp/signUp";
+import LogIn from "./components/login/login";
 
 function App() {
     return (
@@ -14,6 +15,9 @@ function App() {
                     </Route>
                     <Route exact path="/join">
                         <SignUp />
+                    </Route>
+                    <Route exact path="/login">
+                        <LogIn />
                     </Route>
                 </Switch>
             </BrowserRouter>
