@@ -18,7 +18,7 @@ const Header = memo(() => {
         <button className={styles.signUp} onClick={onClickSignUp}>회원가입</button>
         <button className={styles.logout} onClick={onClickLogin}>로그인</button>
         <img className={styles.logo} src="/images/logo.png" alt="logo"/>
-        <h1 className={styles.title}>Green 그린이</h1>
+        <span className={styles.title}>Green 그린이</span>
     </header>
     )
 });

@@ -7,7 +7,7 @@ import Header from "../header/header";
 import Button from "../button/button";
 import Footer from "../footer/footer";
 import {API_BASE_URL} from "../../util/constants";
-import useSWR from "swr";
+import useSWR, {mutate} from "swr";
 import Fetcher from "../../api/fetcher";
 import {useHistory} from "react-router";
 
@@ -27,9 +27,10 @@ const Label = styled.label`
 export const LinkContainer = styled.p`
   font-size: 13px;
   color: #616061;
-  margin: 0 auto 8px;
-  width: 400px;
-  max-width: 400px`;
+  margin: auto;
+  width: 100%;
+  text-align: center;
+`;
 
 const Error = styled.div`
   color: #e01e5a;
@@ -48,7 +49,6 @@ const LogIn = () => {
     const [principal, onChangePrincipal] = useInput('');
     const [credentials, onChangeCredentials] = useInput('');
     const [apiKey, setApiKey] = useState('');
-    const {data, revalidate} = useSWR('http://localhost:8080/api/user', apiKey, Fetcher);
     const formRef = useRef();
     const history = useHistory();
 
@@ -73,9 +73,7 @@ const LogIn = () => {
                 )
                 .then((e) => {
                     setApiKey(e.data.response.jwtToken);
-                    revalidate();
-                    localStorage.setItem(authHeader, apiKey);
-                    goToHome(data);
+                    goToHome(e.data);
                 })
                 .catch((e) => {
                     setLogInError(e.response?.data?.statusCode === 401);
@@ -85,12 +83,15 @@ const LogIn = () => {
     );
 
 
-    console.log(data);
+    console.log(apiKey);
 
     return (
         <div className={styles.container}>
             <Header />
             <form ref={formRef} className={styles.form}>
+                <h4 className="login-title">
+                    💖 그린이에 오신 것을 환영합니다!
+                </h4>
                 <div className={styles.list}>
                     <input className={styles.input} type="text" name="email" value={principal} onChange={onChangePrincipal} placeholder="Email"/>
                     <input className={styles.input} type="password" name="password" value={credentials} onChange={onChangeCredentials} placeholder="password"/>

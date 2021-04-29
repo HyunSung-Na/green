@@ -33,7 +33,7 @@ export const Success = styled.div`
   font-weight: bold;
 `;
 
-const SignUp = (props) => {
+const SignUp = () => {
     const [name, onChangeName, setName] = useInput('');
     const [password, setPassword] = useState('');
     const [email, onChangeEmail, setEmail] = useInput('');
@@ -97,6 +97,9 @@ const SignUp = (props) => {
         <div className={styles.container}>
             <Header />
             <form className={styles.form}>
+                <h4 className="login-title">
+                    💖 그린이에 오신 것을 환영합니다!
+                </h4>
                 <div className={styles.list}>
                     <input className={styles.input} type="text" name="name" value={name} onChange={onChangeName} placeholder="Name"/>
                     <input className={styles.input} type="text" name="email" value={email} onChange={onChangeEmail} placeholder="Email"/>

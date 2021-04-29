@@ -11,7 +11,7 @@
 
 .form {
     margin: auto;
-    width: 40%;
+    width: 33%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -43,6 +43,7 @@
 
 .input {
     flex: 1 1 30%;
+    margin-bottom: 0.2em;
 }
 
 .button:hover {
