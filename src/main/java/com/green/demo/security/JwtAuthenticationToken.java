@@ -10,7 +10,6 @@ import java.util.Collection;
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
   private final Object principal;
-
   private String credentials;
 
   public JwtAuthenticationToken(String principal, String credentials) {
