@@ -13,8 +13,13 @@ const Header = memo(() => {
         history.push('/login');
     }
 
+    const onClickMenu = () => {
+
+    }
+
     return (
     <header className={styles.header}>
+        <button className={styles.menu} onClick={onClickMenu}>메뉴</button>
         <button className={styles.signUp} onClick={onClickSignUp}>회원가입</button>
         <button className={styles.logout} onClick={onClickLogin}>로그인</button>
         <img className={styles.logo} src="/images/logo.png" alt="logo"/>

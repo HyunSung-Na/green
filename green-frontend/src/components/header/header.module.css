@@ -20,6 +20,19 @@
     font-size: 1.5em;
 }
 
+.menu {
+    position: absolute;
+    right: 90em;
+    top: 1em;
+    padding: 0.8em;
+    border-radius: 20%;
+    background-color: makerBlack;
+    color: makerWhite;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+}
+
 .logout {
     position: absolute;
     right: 3em;
