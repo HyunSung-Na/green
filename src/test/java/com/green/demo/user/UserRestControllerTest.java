@@ -161,10 +161,12 @@ public class UserRestControllerTest {
     @Test
     @Order(7)
     void 회원비밀번호수정() throws Exception{
+        String newPassword = "newPassword";
+
         mockMvc.perform(post(API_USER_URL + "settings/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("newPassword", "newPassword")
-                .header("api_key", apiToken))
+                .header("api_key", apiToken)
+                .content(newPassword))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
