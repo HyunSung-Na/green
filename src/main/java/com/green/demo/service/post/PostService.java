@@ -89,4 +89,9 @@ public class PostService {
         postRepository.delete(post);
         postRepository.flush();
     }
+
+    @Transactional(readOnly = true)
+    public Post findByPostTitle(String title) {
+        return postRepository.findByTitle(title);
+    }
 }
