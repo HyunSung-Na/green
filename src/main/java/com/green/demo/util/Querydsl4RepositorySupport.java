@@ -53,6 +53,4 @@ public abstract class Querydsl4RepositorySupport {
     protected JPAQuery<?> selectFrom(EntityPath<?> from) {
         return queryFactory.selectFrom(from);
     }
-
-    protected
 }
