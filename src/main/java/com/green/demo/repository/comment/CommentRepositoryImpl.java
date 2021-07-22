@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import static com.green.demo.model.comment.QComment.*;
+import static com.green.demo.model.review.QReview.*;
+import static com.green.demo.model.user.QUser.*;
+
 @RequiredArgsConstructor
 public class CommentRepositoryImpl implements CommentRepositoryCustom{
 
@@ -16,10 +20,10 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
 
     @Override
     public List<Comment> findReviewByIdWithComments(long reviewId) {
-        return jpaQueryFactory.selectFrom(QComment.comment)
-                .join(QComment.comment.review, QReview.review).fetchJoin()
-                .leftJoin(QComment.comment.user, QUser.user).fetchJoin()
-                .where(QReview.review.id.eq(reviewId))
+        return jpaQueryFactory.selectFrom(comment)
+                .join(comment.review, review).fetchJoin()
+                .leftJoin(comment.user, user).fetchJoin()
+                .where(review.id.eq(reviewId))
                 .fetch();
     }
 }
