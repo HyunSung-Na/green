@@ -22,7 +22,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
     public List<Comment> findReviewByIdWithComments(long reviewId) {
         return jpaQueryFactory.selectFrom(comment)
                 .join(comment.review, review).fetchJoin()
-                .leftJoin(comment.user, user).fetchJoin()
+                .join(comment.user, user).fetchJoin()
                 .where(review.id.eq(reviewId))
                 .fetch();
     }
