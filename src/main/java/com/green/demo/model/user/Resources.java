@@ -39,6 +39,16 @@ public class Resources implements Serializable {
             @JoinColumn(name = "resource_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<Role> roleSet = new HashSet<>();
 
+    @Builder
+    public Resources(Long id, String resourceName, String httpMethod, int orderNum, String resourceType, Set<Role> roleSet) {
+        this.id = id;
+        this.resourceName = resourceName;
+        this.httpMethod = httpMethod;
+        this.orderNum = orderNum;
+        this.resourceType = resourceType;
+        this.roleSet = roleSet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
