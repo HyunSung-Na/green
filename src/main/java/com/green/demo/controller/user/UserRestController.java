@@ -36,7 +36,7 @@ public class UserRestController {
                                         new Email(signUpRequest.getPrincipal()),
                                         signUpRequest.getCredentials());
 
-        String apiToken = newUser.newApiToken(jwt, new String[]{Role.USER.value()});
+        String apiToken = newUser.newApiToken(jwt, new String[]{"ROLE_USER"});
 
         return ApiResult.OK(new JoinResult(apiToken, newUser));
     }

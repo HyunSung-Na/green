@@ -15,10 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -71,6 +68,11 @@ public class User {
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private final List<Comment> comments = new ArrayList<>();
+
+  @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+  @JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+          @JoinColumn(name = "role_id") })
+  private Set<Role> userRoles = new HashSet<>();
 
   @Builder
   public User(Name name, Email email, String password) {

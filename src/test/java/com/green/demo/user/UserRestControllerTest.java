@@ -63,7 +63,7 @@ public class UserRestControllerTest {
         password = "임의패스워드실험";
 
         User user = userService.join(name, new Email(email), password);
-        apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{Role.USER.value()});
+        apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{"ROLE_USER"});
         TEST_ID = user.getId();
     }
 

@@ -38,7 +38,7 @@ public class AuthenticateController {
                 .orElseThrow(() -> new NotFoundException(User.class, email));
         userService.completeSignUp(user, token);
 
-        String apiToken = user.newApiToken(jwt, new String[]{Role.USER.value()});
+        String apiToken = user.newApiToken(jwt, new String[]{"ROLE_USER"});
 
         return OK(
                 new AuthenticationResultDto(

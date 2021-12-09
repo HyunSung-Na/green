@@ -7,15 +7,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "RESOURCES")
 @Getter
 @RequiredArgsConstructor
 @EntityListeners(value = { AuditingEntityListener.class })
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Resources implements Serializable {
 
     @Id
@@ -34,6 +33,11 @@ public class Resources implements Serializable {
 
     @Column(name = "resource_type")
     private String resourceType;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "role_resources", joinColumns = {
+            @JoinColumn(name = "resource_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+    private Set<Role> roleSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

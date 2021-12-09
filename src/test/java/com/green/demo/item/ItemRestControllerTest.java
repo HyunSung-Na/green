@@ -56,7 +56,7 @@ public class ItemRestControllerTest {
         String password = "임의패스워드실험";
 
         user = userService.join(name, new Email(email), password);
-        apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{Role.USER.value()});
+        apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{"ROLE_USER"});
         item = itemService.createItem(createDto(), user.getEmail());
         TEST_ID = item.getId();
     }

@@ -67,7 +67,7 @@ public class CommentRestControllerTest {
         String password = "임의패스워드실험";
 
         user = userService.join(name, new Email(email), password);
-        apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{Role.USER.value()});
+        apiToken = "Bearer "  + user.newApiToken(jwt, new String[]{"ROLE_USER"});
 
         item = itemService.createItem(itemCreateDto(), user.getEmail());
         review = reviewService.writeReview(reviewCreateDto(), user.getEmail());

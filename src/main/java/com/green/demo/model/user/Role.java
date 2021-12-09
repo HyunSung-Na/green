@@ -1,26 +1,38 @@
 package com.green.demo.model.user;
 
-public enum Role {
+import lombok.*;
 
-  USER("ROLE_USER");
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-  private final String value;
+@Entity
+@Table(name = "ROLE")
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class Role implements Serializable {
 
-  Role(String value) {
-    this.value = value;
-  }
+  @Id
+  @GeneratedValue
+  @Column(name = "role_id")
+  private Long id;
 
-  public String value() {
-    return value;
-  }
+  @Column(name = "role_name")
+  private String roleName;
 
-  public static Role of(String name) {
-    for (Role role : Role.values()) {
-      if (role.name().equalsIgnoreCase(name)) {
-        return role;
-      }
-    }
-    return null;
-  }
+  @Column(name = "role_desc")
+  private String roleDesc;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roleSet")
+  @OrderBy(value = "orderNum desc")
+  private Set<Resources> resourcesSet = new LinkedHashSet<>();
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles")
+  private Set<User> users = new HashSet<>();
 
 }

@@ -11,7 +11,6 @@ import java.io.Serializable;
 @Table(name = "ACCESS_IP")
 @Getter
 @RequiredArgsConstructor
-@NoArgsConstructor
 @AllArgsConstructor
 public class AccessIp implements Serializable {
 
