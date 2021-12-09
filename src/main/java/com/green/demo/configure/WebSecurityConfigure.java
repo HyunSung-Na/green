@@ -1,15 +1,17 @@
 package com.green.demo.configure;
 
 
-import com.green.demo.model.user.Role;
 import com.green.demo.security.*;
+import com.green.demo.service.resource.SecurityResourceService;
 import com.green.demo.service.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.vote.UnanimousBased;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,14 +21,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
   private final Jwt jwt;
@@ -39,13 +43,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
   private final CorsConfig corsConfig;
 
-  public WebSecurityConfigure(Jwt jwt, JwtTokenConfigure jwtTokenConfigure, JwtAccessDeniedHandler accessDeniedHandler, EntryPointUnauthorizedHandler unauthorizedHandler, CorsConfig corsConfig) {
-    this.jwt = jwt;
-    this.jwtTokenConfigure = jwtTokenConfigure;
-    this.accessDeniedHandler = accessDeniedHandler;
-    this.unauthorizedHandler = unauthorizedHandler;
-    this.corsConfig = corsConfig;
-  }
+  private final SecurityResourceService securityResourceService;
 
   @Bean
   public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
@@ -81,9 +79,31 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
   @Bean
   public AccessDecisionManager accessDecisionManager() {
-    List<AccessDecisionVoter<?>> decisionVoters = new ArrayList<>();
-    decisionVoters.add(new WebExpressionVoter());
-    return new UnanimousBased(decisionVoters);
+    return new AffirmativeBased(getAccessDecisionVoters());
+  }
+
+  @Bean
+  public List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
+    return Arrays.asList(new RoleVoter());
+  }
+
+  @Bean
+  public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
+    FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+    filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetaDataSource());
+    filterSecurityInterceptor.setAccessDecisionManager(accessDecisionManager());
+    filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
+    return filterSecurityInterceptor;
+  }
+
+  @Bean
+  public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetaDataSource() throws Exception {
+    return new UrlFilterInvocationSecurityMetaDataSource(urlResourcesMapFactoryBean().getObject());
+  }
+
+  @Bean
+  public UrlResourcesMapFactoryBean urlResourcesMapFactoryBean() {
+    return new UrlResourcesMapFactoryBean(securityResourceService);
   }
 
   @Override
@@ -100,19 +120,12 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
       .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-      .authorizeRequests()
-        .antMatchers("/api/auth").permitAll()
-        .antMatchers("/api/join").permitAll()
-        .antMatchers("/api/user/exists").permitAll()
-        .antMatchers("/api/**").hasRole("USER")
-        .accessDecisionManager(accessDecisionManager())
-        .anyRequest().permitAll()
-        .and()
             .addFilter(corsConfig.corsFilter())
             .formLogin()
         .disable();
     http
-      .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+      .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class);
   }
 
 }
