@@ -27,7 +27,6 @@ public class UrlResourcesMapFactoryBean implements FactoryBean<LinkedHashMap<Req
 
     private void init() {
         resource = securityResourceService.getResourceList();
-        System.out.println(resource);
     }
 
     @Override

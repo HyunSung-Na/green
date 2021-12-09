@@ -65,6 +65,9 @@ public class SecurityResourceService {
         roles.add(userRole);
         Resources user = setResourcesBuilder("/api/user/**", "url", "*", 4, roles);
         resourcesRepository.save(user);
+
+        Resources all = setResourcesBuilder("/api/**", "url", "*", 6, roles);
+        resourcesRepository.save(all);
     }
 
     private Role setRoleBuilder(String roleName) {
