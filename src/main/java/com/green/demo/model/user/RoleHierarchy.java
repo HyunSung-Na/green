@@ -22,10 +22,16 @@ public class RoleHierarchy implements Serializable {
     @Column(name = "child_name")
     private String childName;
 
-    @ManyToOne(cascade = {CascadeType.ALL},fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_name", referencedColumnName = "child_name")
     private RoleHierarchy parentName;
 
     @OneToMany(mappedBy = "parentName", cascade={CascadeType.ALL})
     private Set<RoleHierarchy> roleHierarchy = new HashSet<>();
+
+    @Builder
+    public RoleHierarchy(String childName, RoleHierarchy parentName) {
+        this.childName = childName;
+        this.parentName = parentName;
+    }
 }

@@ -53,6 +53,9 @@ public class SecurityResourceService {
 
         userRole = roleRepository.save(userRole);
 
+        Role adminRole = setRoleBuilder("ROLE_ADMIN");
+        roleRepository.save(adminRole);
+
         Resources login = setResourcesBuilder("/api/auth", "url", "GET", 1, new HashSet<>());
         resourcesRepository.save(login);
 
