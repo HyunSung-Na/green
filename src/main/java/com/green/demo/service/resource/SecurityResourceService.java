@@ -1,8 +1,10 @@
 package com.green.demo.service.resource;
 
+import com.green.demo.model.user.AccessIp;
 import com.green.demo.model.user.Resources;
 import com.green.demo.model.user.Role;
 import com.green.demo.repository.resources.ResourcesRepository;
+import com.green.demo.repository.user.AccessIpRepository;
 import com.green.demo.repository.user.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -21,6 +23,9 @@ public class SecurityResourceService {
     public static String RESOURCE_TYPE = "url";
 
     private final ResourcesRepository resourcesRepository;
+
+    @Autowired
+    private AccessIpRepository accessIpRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -87,5 +92,9 @@ public class SecurityResourceService {
                 .orderNum(orderNum)
                 .roleSet(roles)
                 .build();
+    }
+
+    public List<String> getAccessIpAddressList() {
+       return accessIpRepository.findAll().stream().map(AccessIp::getIpAddress).collect(Collectors.toList());
     }
 }

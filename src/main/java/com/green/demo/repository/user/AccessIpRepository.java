@@ -1,0 +1,9 @@
+package com.green.demo.repository.user;
+
+import com.green.demo.model.user.AccessIp;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AccessIpRepository extends JpaRepository<AccessIp, Long> {
+
+    AccessIp findByIpAddress(String ipAddress);
+}
