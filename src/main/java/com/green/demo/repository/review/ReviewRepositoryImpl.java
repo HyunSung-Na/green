@@ -1,25 +1,27 @@
 package com.green.demo.repository.review;
 
-import com.green.demo.model.comment.QComment;
 import com.green.demo.model.item.QItem;
-import com.green.demo.model.review.QReview;
 import com.green.demo.model.review.Review;
 import com.green.demo.model.user.QUser;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.green.demo.util.Querydsl4RepositorySupport;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
-@RequiredArgsConstructor
-public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
+import static com.green.demo.model.review.QReview.*;
 
-    private final JPAQueryFactory jpaQueryFactory;
+@Repository
+public class ReviewRepositoryImpl extends Querydsl4RepositorySupport implements ReviewRepositoryCustom {
+
+    protected ReviewRepositoryImpl() {
+        super(Review.class);
+    }
 
     @Override
     public Review findReviewByIdWithComments(long reviewId) {
-        return jpaQueryFactory.selectFrom(QReview.review)
-                .leftJoin(QReview.review.user, QUser.user).fetchJoin()
-                .leftJoin(QReview.review.item, QItem.item).fetchJoin()
-                .where(QReview.review.id.eq(reviewId))
+        return selectFrom(review)
+                .leftJoin(review.user, QUser.user).fetchJoin()
+                .leftJoin(review.item, QItem.item).fetchJoin()
+                .where(review.id.eq(reviewId))
                 .fetch()
                 .get(0);
     }
